@@ -27,6 +27,7 @@ class App {
     }
     $App = new App();
     $App->initialize($URL, $Get, $Post, $Server, $Cookie);
+    $App->setRoutes();
     try {
       try {
         return $App->execute(HTTP::assert($method));
