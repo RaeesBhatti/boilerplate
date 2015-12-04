@@ -30,9 +30,9 @@ class App {
     $App->setRoutes();
     try {
       try {
-        return $App->execute(HTTP::assert($method));
+        $Content = $App->execute(HTTP::assert($method));
       } catch (APIException $e) {
-        return Helper::apiEncode($e);
+        $Content = Helper::apiEncode($e);
       } catch (HTTPException $e) {
         throw $e;
       } catch (Exception $e) {
@@ -41,8 +41,14 @@ class App {
       }
     } catch (HTTPException $e) {
       static::$HTTPCode = $e->httpCode;
-      return (string) Theme_Error::Render();
+      if (APP_ENV === AppEnv::API) {
+        $Content = json_encode(['status' => false, 'message' => "HTTP Error $e->httpCode", 'type' => 'http']);
+      } else {
+        $Content = (string) Theme_Error::Render();
+      }
     }
+    http_response_code(static::$HTTPCode);
+    return $Content;
   }
 
   public function initialize(string $URL, array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie): void {
