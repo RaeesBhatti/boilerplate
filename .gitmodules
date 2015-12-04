@@ -1,0 +1,3 @@
+[submodule "external/xhp"]
+	path = external/xhp
+	url = https://github.com/facebook/xhp-lib.git
