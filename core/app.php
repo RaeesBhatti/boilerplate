@@ -58,7 +58,7 @@ class App {
     static::$Post = array_map(class_meth('Helper', 'trim'), $Post);
     static::$Server = array_map(class_meth('Helper', 'trim'), $Server);
     static::$Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
-    // static::$DB = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=' . CONFIG_DB_NAME, CONFIG_DB_USER, CONFIG_DB_PASS);
+    static::$DB = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=' . CONFIG_DB_NAME, CONFIG_DB_USER, CONFIG_DB_PASS);
     static::$Router = new Router();
     static::$RouterAPI = new Router();
   }
