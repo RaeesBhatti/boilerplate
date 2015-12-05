@@ -1,7 +1,7 @@
 <?hh
 
 class Session {
-  public function get<T>(string $key, ?T $default = null): ?T {
+  public function get<T>(string $key, T $default): T {
     if (array_key_exists($key, $_SESSION)) {
       return $_SESSION[$key];
     } else {
