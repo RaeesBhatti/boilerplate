@@ -8,10 +8,17 @@ class App {
   public static int $HTTPCode = 200;
   public static string $URL = '';
   public static array<string> $URLChunks = [];
+  public static ?Session $Session;
   public static ?PDO $DB;
   public static ?Router<classname<Page>> $Router;
   public static ?Router<(function():array<string, string>)> $RouterAPI;
 
+  public static function getSession(): Session {
+    if (static::$Session !== null) {
+      return static::$Session;
+    }
+    return static::$Session = new Session();
+  }
   public static function getDB(): PDO {
     if (static::$DB !== null) {
       return static::$DB;

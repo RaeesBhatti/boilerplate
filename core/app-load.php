@@ -47,6 +47,7 @@ spl_autoload_register(function($Name) {
 require(APP_ROOT.'/config.hh');
 require(APP_ROOT.'/credentials.hh');
 require(__DIR__.'/exceptions.php');
+require(__DIR__.'/session.php');
 require(__DIR__.'/helper.php');
 require(__DIR__.'/page.php');
 require(__DIR__.'/router.php');
