@@ -8,6 +8,10 @@ class App {
   public static int $HTTPCode = 200;
   public static string $URL = '';
   public static array<string> $URLChunks = [];
+  public static int $UserID = 0;
+  public static User $User = shape(
+    'id' => 0
+  );
   public static ?Session $Session;
   public static ?PDO $DB;
   public static ?Router<classname<Page>> $Router;
@@ -87,6 +91,15 @@ class App {
     static::$Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
     static::$Router = new Router();
     static::$RouterAPI = new Router();
+    if (static::getSession()->exists('UserID')) {
+      $ID = static::getSession()->get('UserID', 0);
+      $query = static::query('Select id from users where id = :id LIMIT 1', [':id' => $ID]);
+      if ($query->rowCount()) {
+        static::$User = $query->fetch(PDO::FETCH_ASSOC);
+      } else {
+        static::getSession()->unset('UserID');
+      }
+    }
   }
   public function setRoutes():void {
     $Router = static::getRouter();
