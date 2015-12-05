@@ -12,6 +12,17 @@ class App {
   public static ?Router<classname<Page>> $Router;
   public static ?Router<(function():array<string, string>)> $RouterAPI;
 
+  public static function getDB(): PDO {
+    if (static::$DB !== null) {
+      return static::$DB;
+    }
+    try {
+      return static::$DB = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=' . CONFIG_DB_NAME, CONFIG_DB_USER, CONFIG_DB_PASS);
+    } catch (Exception $e) {
+      error_log($e->getTraceAsString());
+      throw new HTTPException(500);
+    }
+  }
   public static function getRouter(): Router<classname<Page>> {
     if (static::$Router !== null) {
       return static::$Router;
@@ -26,11 +37,7 @@ class App {
   }
 
   public static function query(string $statement, array<string, mixed> $parameters = []): PDOStatement {
-    $DB = static::$DB;
-    if ($DB === null) {
-      throw new Exception('Database connection not established');
-    }
-    $query = $DB->prepare($statement);
+    $query = static::getDB()->prepare($statement);
     $query->execute($parameters);
     return $query;
   }
@@ -71,7 +78,6 @@ class App {
     static::$Post = array_map(class_meth('Helper', 'trim'), $Post);
     static::$Server = array_map(class_meth('Helper', 'trim'), $Server);
     static::$Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
-    static::$DB = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=' . CONFIG_DB_NAME, CONFIG_DB_USER, CONFIG_DB_PASS);
     static::$Router = new Router();
     static::$RouterAPI = new Router();
   }
