@@ -12,6 +12,19 @@ class App {
   public static ?Router<classname<Page>> $Router;
   public static ?Router<(function():array<string, string>)> $RouterAPI;
 
+  public static function getRouter(): Router<classname<Page>> {
+    if (static::$Router !== null) {
+      return static::$Router;
+    }
+    return static::$Router = new Router();
+  }
+  public static function getRouterAPI(): Router<(function():array<string, string>)> {
+    if (static::$RouterAPI !== null) {
+      return static::$RouterAPI;
+    }
+    return static::$RouterAPI = new Router();
+  }
+
   public static function query(string $statement, array<string, mixed> $parameters = []): PDOStatement {
     $DB = static::$DB;
     if ($DB === null) {
@@ -63,25 +76,22 @@ class App {
     static::$RouterAPI = new Router();
   }
   public function setRoutes():void {
-    $Router = static::$Router;
-    $RouterAPI = static::$RouterAPI;
+    $Router = static::getRouter();
+    $RouterAPI = static::getRouterAPI();
 
-    invariant($Router !== null, 'Router is null');
-    invariant($RouterAPI !== null, 'RouterAPI is null');
-
+    // Website
     $Router->get([], Theme_Guest_Home::class, true);
 
+    // API
     $RouterAPI->post(['api', 'account'], class_meth('Theme_Guest_API', 'Login'));
   }
   public function execute(HTTP $method): string {
     if (APP_ENV === AppEnv::API) {
-      $Router = static::$RouterAPI;
-      invariant($Router !== null, 'Router is null');
+      $Router = static::getRouterAPI();
       $Callback = $Router->execute($method, static::$URL, static::$URLChunks);
       return Helper::apiEncode($Callback());
     } else {
-      $Router = static::$Router;
-      invariant($Router !== null, 'Router is null');
+      $Router = static::getRouter();
       $ClassName = $Router->execute($method, static::$URL, static::$URLChunks);
       $Content = $ClassName::Render();
       return '<!doctype html>'.$Content;
