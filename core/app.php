@@ -91,4 +91,10 @@ class App {
     }
     throw new Exception('User is not logged in');
   }
+  public function getRouter(): TRouterWeb {
+    return $this->Router;
+  }
+  public function getRouterAPI(): TRouterAPI {
+    return $this->RouterAPI;
+  }
 }
