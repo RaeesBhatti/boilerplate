@@ -2,10 +2,10 @@
 
 use steelbrain\MySQL;
 
-class AppMain {
-  public static ?AppMain $Instance = null;
+class App {
+  public static ?App $Instance = null;
 
-  public static function getInstance(): AppMain {
+  public static function getInstance(): App {
     if (static::$Instance !== null) {
       return static::$Instance;
     }
@@ -54,5 +54,41 @@ class AppMain {
       $Callback = $this->Router->execute($method, $this->URL, $this->URLChunks);
       return '<!doctype html>'. ((string) $Callback::Render());
     }
+  }
+  // Getters
+  public function getSession(): Session {
+    if ($this->Session !== null) {
+      return $this->Session;
+    }
+    return $this->Session = new Session();
+  }
+  public function getDB(): steelbrain\MySQL {
+    if ($this->DB !== null) {
+      return $this->DB;
+    }
+    try {
+      return $this->DB = MySQL::create(shape(
+        'Host' => 'localhost',
+        'User' => CONFIG_DB_USER,
+        'Pass' => CONFIG_DB_PASS,
+        'Name' => CONFIG_DB_NAME
+      ));
+    } catch (Exception $e) {
+      error_log($e->getTraceAsString());
+      throw new HTTPException(500);
+    }
+  }
+  public function getUser(): User {
+    $session = $this->getSession();
+    if ($session->exists('UserID')) {
+      $id = $session->get('UserID', 0);
+      $user = $this->getDB()->from('users')->select('id')->where(['id' => $id])->get();
+      if ($user !== null) {
+        return $this->User = $user;
+      } else {
+        $session->unset('UserID');
+      }
+    }
+    throw new Exception('User is not logged in');
   }
 }
