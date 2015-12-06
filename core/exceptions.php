@@ -23,7 +23,7 @@ class HTTPUnavailableException extends HTTPException {
 class HTTPRedirectException extends HTTPException {
   public string $redirectUri;
   public function __construct(string $uri) {
-    $this->redirectUri = $uri;
     parent::__construct(302);
+    $this->redirectUri = $uri;
   }
 }
