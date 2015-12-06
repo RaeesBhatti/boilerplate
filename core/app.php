@@ -1,5 +1,7 @@
 <?hh //strict
 
+use steelbrain\MySQL;
+
 class App {
   public static array<string, string> $Get = [];
   public static array<string, string> $Post = [];
@@ -13,7 +15,7 @@ class App {
     'id' => 0
   );
   public static ?Session $Session;
-  public static ?PDO $DB;
+  public static ?MySQL $DB;
   public static ?Router<classname<Page>> $Router;
   public static ?Router<(function():array<string, string>)> $RouterAPI;
 
@@ -23,12 +25,17 @@ class App {
     }
     return static::$Session = new Session();
   }
-  public static function getDB(): PDO {
+  public static function getDB(): MySQL {
     if (static::$DB !== null) {
       return static::$DB;
     }
     try {
-      return static::$DB = new PDO('mysql:host=localhost;charset=utf8mb4;dbname=' . CONFIG_DB_NAME, CONFIG_DB_USER, CONFIG_DB_PASS);
+      return static::$DB = MySQL::create(shape(
+        'Host' => 'localhost',
+        'User' => CONFIG_DB_USER,
+        'Pass' => CONFIG_DB_PASS,
+        'Name' => CONFIG_DB_NAME
+      ));
     } catch (Exception $e) {
       error_log($e->getTraceAsString());
       throw new HTTPException(500);
@@ -47,11 +54,6 @@ class App {
     return static::$RouterAPI = new Router();
   }
 
-  public static function query(string $statement, array<string, mixed> $parameters = []): PDOStatement {
-    $query = static::getDB()->prepare($statement);
-    $query->execute($parameters);
-    return $query;
-  }
   public static function go(string $method, string $URL, array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie): string {
     if (!HTTP::isValid($method)) {
       return '';
@@ -92,10 +94,10 @@ class App {
     static::$Router = new Router();
     static::$RouterAPI = new Router();
     if (static::getSession()->exists('UserID')) {
-      $ID = static::getSession()->get('UserID', 0);
-      $query = static::query('Select id from users where id = :id LIMIT 1', [':id' => $ID]);
-      if ($query->rowCount()) {
-        static::$User = $query->fetch(PDO::FETCH_ASSOC);
+      $id = static::getSession()->get('UserID', 0);
+      $user = static::getDB()->from('users')->select('id')->where(['id' => $id])->get();
+      if ($user !== null) {
+        static::$User = $user;
       } else {
         static::getSession()->unset('UserID');
       }
