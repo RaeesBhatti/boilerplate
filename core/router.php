@@ -51,7 +51,8 @@ class Router<T> {
       list($RequiredURI, $Callback, $isDirectory) = $Entry;
       if ($this->validate($RequiredURI, $URIChunks)) {
         if ($URLIsDirectory !== $isDirectory) {
-          $NewURL = $URI . ($isDirectory ? '/' : '') . (count(App::$Get) ? '?'. http_build_query(App::$Get) : '');
+          $Get = App::getInstance()->Get;
+          $NewURL = $URI . ($isDirectory ? '/' : '') . (count($Get) ? '?'. http_build_query($Get) : '');
           throw new HTTPRedirectException($NewURL);
         } else {
           return $Callback;
