@@ -26,8 +26,8 @@ class App {
   private ?User $User;
   private ?MySQL $DB;
   private Session $Session;
-  private Router<classname<Page>> $Router;
-  private Router<(function():array<string, string>)> $RouterAPI;
+  private TRouterWeb $Router;
+  private TRouterAPI $RouterAPI;
   public function __construct(array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie) {
     $this->Session = new Session();
     $this->Router = new Router();
