@@ -25,4 +25,33 @@ class Helper {
       return json_encode(array_merge(['status' => true], $message));
     } else throw new Exception('Incorrect API Response');
   }
+  public static function go(string $method, array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie): string {
+    if (!HTTP::isValid($method)) {
+      return '';
+    }
+    $App = new App($Get, $Post, $Server, $Cookie);
+    App::$Instance = $App;
+    $App->setRoutes();
+    try {
+      try {
+        $Content = $App->execute(HTTP::assert($method));
+      } catch (APIException $e) {
+        $Content = Helper::apiEncode($e);
+      } catch (HTTPException $e) {
+        throw $e;
+      } catch (Exception $e) {
+        error_log($e->getTraceAsString());
+        throw new HTTPException(500);
+      }
+    } catch (HTTPException $e) {
+      $App->HTTPCode = $e->httpCode;
+      if (APP_ENV === AppEnv::API) {
+        $Content = json_encode(['status' => false, 'message' => "HTTP Error $e->httpCode", 'type' => 'http']);
+      } else {
+        $Content = (string) Theme_Error::Render();
+      }
+    }
+    http_response_code($App->HTTPCode);
+    return $Content;
+  }
 }

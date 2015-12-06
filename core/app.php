@@ -3,34 +3,71 @@
 use steelbrain\MySQL;
 
 class App {
-  public static array<string, string> $Get = [];
-  public static array<string, string> $Post = [];
-  public static array<string, string> $Server = [];
-  public static array<string, string> $Cookie = [];
-  public static int $HTTPCode = 200;
-  public static string $URL = '';
-  public static array<string> $URLChunks = [];
-  public static int $UserID = 0;
-  public static User $User = shape(
-    'id' => 0
-  );
-  public static ?Session $Session;
-  public static ?MySQL $DB;
-  public static ?Router<classname<Page>> $Router;
-  public static ?Router<(function():array<string, string>)> $RouterAPI;
+  public static ?App $Instance = null;
 
-  public static function getSession(): Session {
-    if (static::$Session !== null) {
-      return static::$Session;
+  public static function getInstance(): App {
+    if (static::$Instance !== null) {
+      return static::$Instance;
     }
-    return static::$Session = new Session();
+    throw new Exception('App is not yet initialized');
   }
-  public static function getDB(): MySQL {
-    if (static::$DB !== null) {
-      return static::$DB;
+
+  // Props
+  public array<string, string> $Get;
+  public array<string, string> $Post;
+  public array<string, string> $Server;
+  public array<string, string> $Cookie;
+  public int $HTTPCode = 200;
+  public string $URL;
+  public array<string> $URLChunks;
+  public int $UserID = 0;
+
+  // Instances
+  private ?User $User;
+  private ?MySQL $DB;
+  private Session $Session;
+  private Router<classname<Page>> $Router;
+  private Router<(function():array<string, string>)> $RouterAPI;
+  public function __construct(array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie) {
+    $this->Session = new Session();
+    $this->Router = new Router();
+    $this->RouterAPI = new Router();
+    $this->URL = array_key_exists('REQUEST_URI', $Server) ? explode('?', $Server['REQUEST_URI'])[0] : '';
+    $this->URLChunks = Helper::uriToChunks($this->URL);
+    $this->Get = array_map(class_meth('Helper', 'trim'), $Get);
+    $this->Post = array_map(class_meth('Helper', 'trim'), $Post);
+    $this->Server = array_map(class_meth('Helper', 'trim'), $Server);
+    $this->Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
+  }
+  public function setRoutes():void {
+    // Website
+    $this->Router->get([], Theme_Guest_Home::class, true);
+
+    // API
+    $this->RouterAPI->post(['api', 'account'], class_meth('Theme_Guest_API', 'Login'));
+  }
+  public function execute(HTTP $method): string {
+    if (APP_ENV === AppEnv::API) {
+      $Callback = $this->RouterAPI->execute($method, $this->URL, $this->URLChunks);
+      return Helper::apiEncode($Callback());
+    } else {
+      $Callback = $this->Router->execute($method, $this->URL, $this->URLChunks);
+      return '<!doctype html>'. ((string) $Callback::Render());
+    }
+  }
+  // Getters
+  public function getSession(): Session {
+    if ($this->Session !== null) {
+      return $this->Session;
+    }
+    return $this->Session = new Session();
+  }
+  public function getDB(): steelbrain\MySQL {
+    if ($this->DB !== null) {
+      return $this->DB;
     }
     try {
-      return static::$DB = MySQL::create(shape(
+      return $this->DB = MySQL::create(shape(
         'Host' => 'localhost',
         'User' => CONFIG_DB_USER,
         'Pass' => CONFIG_DB_PASS,
@@ -41,88 +78,17 @@ class App {
       throw new HTTPException(500);
     }
   }
-  public static function getRouter(): Router<classname<Page>> {
-    if (static::$Router !== null) {
-      return static::$Router;
-    }
-    return static::$Router = new Router();
-  }
-  public static function getRouterAPI(): Router<(function():array<string, string>)> {
-    if (static::$RouterAPI !== null) {
-      return static::$RouterAPI;
-    }
-    return static::$RouterAPI = new Router();
-  }
-
-  public static function go(string $method, string $URL, array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie): string {
-    if (!HTTP::isValid($method)) {
-      return '';
-    }
-    $App = new App();
-    $App->initialize($URL, $Get, $Post, $Server, $Cookie);
-    $App->setRoutes();
-    try {
-      try {
-        $Content = $App->execute(HTTP::assert($method));
-      } catch (APIException $e) {
-        $Content = Helper::apiEncode($e);
-      } catch (HTTPException $e) {
-        throw $e;
-      } catch (Exception $e) {
-        error_log($e->getTraceAsString());
-        throw new HTTPException(500);
-      }
-    } catch (HTTPException $e) {
-      static::$HTTPCode = $e->httpCode;
-      if (APP_ENV === AppEnv::API) {
-        $Content = json_encode(['status' => false, 'message' => "HTTP Error $e->httpCode", 'type' => 'http']);
-      } else {
-        $Content = (string) Theme_Error::Render();
-      }
-    }
-    http_response_code(static::$HTTPCode);
-    return $Content;
-  }
-
-  public function initialize(string $URL, array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie): void {
-    static::$URL = $URL;
-    static::$URLChunks = Helper::uriToChunks($URL);
-    static::$Get = array_map(class_meth('Helper', 'trim'), $Get);
-    static::$Post = array_map(class_meth('Helper', 'trim'), $Post);
-    static::$Server = array_map(class_meth('Helper', 'trim'), $Server);
-    static::$Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
-    static::$Router = new Router();
-    static::$RouterAPI = new Router();
-    if (static::getSession()->exists('UserID')) {
-      $id = static::getSession()->get('UserID', 0);
-      $user = static::getDB()->from('users')->select('id')->where(['id' => $id])->get();
+  public function getUser(): User {
+    $session = $this->getSession();
+    if ($session->exists('UserID')) {
+      $id = $session->get('UserID', 0);
+      $user = $this->getDB()->from('users')->select('id')->where(['id' => $id])->get();
       if ($user !== null) {
-        static::$User = $user;
+        return $this->User = $user;
       } else {
-        static::getSession()->unset('UserID');
+        $session->unset('UserID');
       }
     }
-  }
-  public function setRoutes():void {
-    $Router = static::getRouter();
-    $RouterAPI = static::getRouterAPI();
-
-    // Website
-    $Router->get([], Theme_Guest_Home::class, true);
-
-    // API
-    $RouterAPI->post(['api', 'account'], class_meth('Theme_Guest_API', 'Login'));
-  }
-  public function execute(HTTP $method): string {
-    if (APP_ENV === AppEnv::API) {
-      $Router = static::getRouterAPI();
-      $Callback = $Router->execute($method, static::$URL, static::$URLChunks);
-      return Helper::apiEncode($Callback());
-    } else {
-      $Router = static::getRouter();
-      $ClassName = $Router->execute($method, static::$URL, static::$URLChunks);
-      $Content = $ClassName::Render();
-      return '<!doctype html>'.$Content;
-    }
+    throw new Exception('User is not logged in');
   }
 }
