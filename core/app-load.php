@@ -51,5 +51,6 @@ require(__DIR__.'/session.php');
 require(__DIR__.'/shapes.php');
 require(__DIR__.'/helper.php');
 require(__DIR__.'/page.php');
+require(__DIR__.'/theme.php');
 require(__DIR__.'/router.php');
 require(__DIR__.'/app.php');
