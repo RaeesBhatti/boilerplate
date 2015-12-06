@@ -5,6 +5,7 @@ class Router<T> {
     T,
     bool
   )>> $Callbacks;
+  public array<classname<Theme>> $Themes = [];
 
   public function __construct() {
     // Registry of callbacks
@@ -35,6 +36,20 @@ class Router<T> {
   public function route(HTTP $Term, array<string> $URI, T $Callback, bool $isDirectory = false): this {
     $this->Callbacks[$Term][] = tuple($URI, $Callback, $isDirectory);
     return $this;
+  }
+
+  public function registerTheme(classname<Theme> $Theme): void {
+    $this->Themes[] = $Theme;
+  }
+
+  public function executeTheme(string $URL): classname<Theme> {
+    foreach($this->Themes as $Theme) {
+      $Prefix = $Theme::PREFIX;
+      if (strpos($URL, $Prefix) === 0) {
+        return $Theme;
+      }
+    }
+    throw new Exception('Theme not found');
   }
 
   public function execute(HTTP $Term, string $URI, ?array<string> $URIChunks = null): T {
