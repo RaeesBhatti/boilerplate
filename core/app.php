@@ -86,9 +86,9 @@ class App {
     } else {
       $Router = new Router();
       $Theme->registerWeb($Router);
-      $Callback = $Router->execute($Method, $this->URL, $this->URLChunks);
-      // UNSAFE
-      return '<!doctype html>'. ((string) $Callback::Render());
+      $PageName = $Router->execute($Method, $this->URL, $this->URLChunks);
+      $Page = new $PageName();
+      return '<!doctype html>'. $Page->render();
     }
   }
 }

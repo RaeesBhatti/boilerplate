@@ -1,4 +1,5 @@
 <?hh //strict
-interface Page {
-  public static function Render(): :html;
+abstract class Page {
+  abstract public function __construct(): void;
+  abstract public function render(): :html;
 }
