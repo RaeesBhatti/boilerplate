@@ -31,7 +31,7 @@ class Helper {
     }
     $App = new App($Get, $Post, $Server, $Cookie);
     App::$Instance = $App;
-    $App->setRoutes();
+
     try {
       try {
         $Content = $App->execute(HTTP::assert($method));
@@ -48,7 +48,8 @@ class Helper {
       if (APP_ENV === AppEnv::API) {
         $Content = json_encode(['status' => false, 'message' => "HTTP Error $e->httpCode", 'type' => 'http']);
       } else {
-        $Content = (string) Theme_Error::Render();
+        $ErrorPage = new Theme_Error();
+        return (string) $ErrorPage->render();
       }
     }
     http_response_code($App->HTTPCode);

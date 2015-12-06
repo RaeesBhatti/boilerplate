@@ -26,34 +26,14 @@ class App {
   private ?User $User;
   private ?MySQL $DB;
   private Session $Session;
-  private Router<classname<Page>> $Router;
-  private Router<(function():array<string, string>)> $RouterAPI;
   public function __construct(array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie) {
     $this->Session = new Session();
-    $this->Router = new Router();
-    $this->RouterAPI = new Router();
     $this->URL = array_key_exists('REQUEST_URI', $Server) ? explode('?', $Server['REQUEST_URI'])[0] : '';
     $this->URLChunks = Helper::uriToChunks($this->URL);
     $this->Get = array_map(class_meth('Helper', 'trim'), $Get);
     $this->Post = array_map(class_meth('Helper', 'trim'), $Post);
     $this->Server = array_map(class_meth('Helper', 'trim'), $Server);
     $this->Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
-  }
-  public function setRoutes():void {
-    // Website
-    $this->Router->get([], Theme_Guest_Home::class, true);
-
-    // API
-    $this->RouterAPI->post(['api', 'account'], class_meth('Theme_Guest_API', 'Login'));
-  }
-  public function execute(HTTP $method): string {
-    if (APP_ENV === AppEnv::API) {
-      $Callback = $this->RouterAPI->execute($method, $this->URL, $this->URLChunks);
-      return Helper::apiEncode($Callback());
-    } else {
-      $Callback = $this->Router->execute($method, $this->URL, $this->URLChunks);
-      return '<!doctype html>'. ((string) $Callback::Render());
-    }
   }
   // Getters
   public function getSession(): Session {
@@ -90,5 +70,25 @@ class App {
       }
     }
     throw new Exception('User is not logged in');
+  }
+  public function execute(HTTP $Method): string {
+    $RouterTheme = new Router();
+    $RouterTheme->registerTheme(Theme_Guest_Main::class);
+
+    $ThemeName = $RouterTheme->executeTheme($this->Server['REQUEST_URI']);
+    $Theme = new $ThemeName();
+
+    if (APP_ENV === AppEnv::API) {
+      $Router = new Router();
+      $Theme->registerAPI($Router);
+      $Callback = $Router->execute($Method, $this->URL, $this->URLChunks);
+      return Helper::apiEncode($Callback());
+    } else {
+      $Router = new Router();
+      $Theme->registerWeb($Router);
+      $PageName = $Router->execute($Method, $this->URL, $this->URLChunks);
+      $Page = new $PageName();
+      return '<!doctype html>'. $Page->render();
+    }
   }
 }

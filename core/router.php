@@ -5,6 +5,7 @@ class Router<T> {
     T,
     bool
   )>> $Callbacks;
+  public array<classname<Theme>> $Themes = [];
 
   public function __construct() {
     // Registry of callbacks
@@ -37,6 +38,20 @@ class Router<T> {
     return $this;
   }
 
+  public function registerTheme(classname<Theme> $Theme): void {
+    $this->Themes[] = $Theme;
+  }
+
+  public function executeTheme(string $URL): classname<Theme> {
+    foreach($this->Themes as $Theme) {
+      $Prefix = $Theme::PREFIX;
+      if (strpos($URL, $Prefix) === 0) {
+        return $Theme;
+      }
+    }
+    throw new Exception('Theme not found');
+  }
+
   public function execute(HTTP $Term, string $URI, ?array<string> $URIChunks = null): T {
     if ($URIChunks === null) {
       $URIChunks = Helper::uriToChunks($URI);
@@ -51,7 +66,8 @@ class Router<T> {
       list($RequiredURI, $Callback, $isDirectory) = $Entry;
       if ($this->validate($RequiredURI, $URIChunks)) {
         if ($URLIsDirectory !== $isDirectory) {
-          $NewURL = $URI . ($isDirectory ? '/' : '') . (count(App::$Get) ? '?'. http_build_query(App::$Get) : '');
+          $Get = App::getInstance()->Get;
+          $NewURL = $URI . ($isDirectory ? '/' : '') . (count($Get) ? '?'. http_build_query($Get) : '');
           throw new HTTPRedirectException($NewURL);
         } else {
           return $Callback;

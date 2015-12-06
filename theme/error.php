@@ -1,6 +1,9 @@
 <?hh //strict
-class Theme_Error implements Page {
-  public static function Render(): :html {
+class Theme_Error extends Page {
+  public function __construct(): void {
+
+  }
+  public function render(): :html {
     $errorCode = App::getInstance()->HTTPCode;
     return <html>
       <head></head>
