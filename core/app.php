@@ -11,14 +11,24 @@ class App {
   public static string $URL = '';
   public static array<string> $URLChunks = [];
   public static int $UserID = 0;
-  public static User $User = shape(
-    'id' => 0
-  );
+  public static ?User $User = null;
   public static ?Session $Session;
   public static ?MySQL $DB;
   public static ?Router<classname<Page>> $Router;
   public static ?Router<(function():array<string, string>)> $RouterAPI;
 
+  public static function getUser(): User {
+    if (static::getSession()->exists('UserID')) {
+      $id = static::getSession()->get('UserID', 0);
+      $user = static::getDB()->from('users')->select('id')->where(['id' => $id])->get();
+      if ($user !== null) {
+        return static::$User = $user;
+      } else {
+        static::getSession()->unset('UserID');
+      }
+    }
+    throw new Exception('User is not logged in');
+  }
   public static function getSession(): Session {
     if (static::$Session !== null) {
       return static::$Session;
@@ -93,15 +103,6 @@ class App {
     static::$Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
     static::$Router = new Router();
     static::$RouterAPI = new Router();
-    if (static::getSession()->exists('UserID')) {
-      $id = static::getSession()->get('UserID', 0);
-      $user = static::getDB()->from('users')->select('id')->where(['id' => $id])->get();
-      if ($user !== null) {
-        static::$User = $user;
-      } else {
-        static::getSession()->unset('UserID');
-      }
-    }
   }
   public function setRoutes():void {
     $Router = static::getRouter();
