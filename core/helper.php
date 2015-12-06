@@ -31,7 +31,7 @@ class Helper {
     }
     $App = new App($Get, $Post, $Server, $Cookie);
     App::$Instance = $App;
-    $App->setRoutes();
+
     try {
       try {
         $Content = $App->execute(HTTP::assert($method));
