@@ -9,6 +9,14 @@ class Helper {
       return trim((string) $Value);
     }
   }
+  // For API use only
+  public static function validateFields(ImmSet<string> $Fields, array<string, string> $Post): void {
+    foreach ($Fields as $FieldName) {
+      if (!array_key_exists($FieldName, $Post)) {
+        throw new APIException();
+      }
+    }
+  }
   public static function uriToChunks(string $URI): array<string> {
     $Chunks = [];
     foreach (explode('/', $URI) as $Chunk) {
