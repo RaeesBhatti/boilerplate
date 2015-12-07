@@ -40,7 +40,7 @@ class Helper {
       } catch (HTTPException $e) {
         throw $e;
       } catch (Exception $e) {
-        error_log($e->getTraceAsString());
+        error_log($e->getMessage(). "\n" . $e->getTraceAsString());
         throw new HTTPException(500);
       }
     } catch (HTTPException $e) {

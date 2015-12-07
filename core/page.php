@@ -4,5 +4,5 @@ abstract class Page {
   public array<Stringish> $Header = [];
   public array<Stringish> $Footer = [];
   abstract public function __construct(): void;
-  abstract public function render(): :html;
+  abstract public function render(): Stringish;
 }

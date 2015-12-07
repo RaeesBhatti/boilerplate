@@ -31,16 +31,17 @@ if (APP_DEBUG) {
 require(APP_ROOT.'/external/xhp/init.php');
 spl_autoload_register(function($Name) {
 
-  $Chunks = explode('\\', $Name);
-
-  if (count($Chunks) == 1) {
+  if (substr($Name, 0, 4) === 'xhp_') {
+    $ClassName = substr($Name, 4);
+    $FilePath = __DIR__.'/xhp/'.$ClassName.'.php';
+  } else {
     // Converts Theme_User_Home to theme/user/home.php
     $Chunks = explode('_', $Name);
     $FilePath = APP_ROOT.'/'.strtolower(implode('/', $Chunks)).'.php';
+  }
 
-    if (file_exists($FilePath)) {
-      require($FilePath);
-    }
+  if ($FilePath !== null && file_exists($FilePath)) {
+    require($FilePath);
   }
 });
 
