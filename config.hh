@@ -10,3 +10,6 @@ enum AppEnv: string as string {
   UNIT_TESTS = 'UNIT_TESTS';
   MAIN = 'MAIN';
 }
+enum AppConfig: string as string {
+  ASSETS_PREFIX = '/';
+}
