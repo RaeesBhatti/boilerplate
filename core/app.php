@@ -80,6 +80,9 @@ class App {
 
     $ChoppedURL = substr($this->URL, strlen($Theme::PREFIX));
     if ($ChoppedURL === false) {
+      if (substr($this->URL, 0 -1) !== '/') {
+        throw new HTTPRedirectException($this->URL . '/');
+      }
       $ChoppedURL = '/';
     }
 
