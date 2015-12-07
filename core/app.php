@@ -78,15 +78,20 @@ class App {
     $ThemeName = $RouterTheme->executeTheme($this->Server['REQUEST_URI']);
     $Theme = new $ThemeName();
 
+    $ChoppedURL = substr($this->URL, strlen($Theme::PREFIX));
+    if ($ChoppedURL === false) {
+      $ChoppedURL = '/';
+    }
+
     if (APP_ENV === AppEnv::API) {
       $Router = new Router();
       $Theme->registerAPI($Router);
-      $Callback = $Router->execute($Method, $this->URL, $this->URLChunks);
+      $Callback = $Router->execute($Method, $ChoppedURL);
       return Helper::apiEncode($Callback());
     } else {
       $Router = new Router();
       $Theme->registerWeb($Router);
-      $PageName = $Router->execute($Method, $this->URL, $this->URLChunks);
+      $PageName = $Router->execute($Method, $ChoppedURL);
       return (string) Helper::renderPage($PageName);
     }
   }
