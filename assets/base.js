@@ -45,5 +45,15 @@
     return elements
   }
 
-  window.App = {lock, ajax, getElements}
+  function getValues(elements) {
+    const values = {}
+    for (const key in elements) {
+      const element = elements[key]
+
+      values[key] = element.value
+    }
+    return values
+  }
+
+  window.App = {lock, ajax, getElements, getValues}
 })(window)
