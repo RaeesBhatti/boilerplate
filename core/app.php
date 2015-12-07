@@ -87,15 +87,7 @@ class App {
       $Router = new Router();
       $Theme->registerWeb($Router);
       $PageName = $Router->execute($Method, $this->URL, $this->URLChunks);
-      $Page = new $PageName();
-      $Content = $Page->render();
-      if (!is_string($Content)) {
-        if (!($Content instanceof :page)) {
-          throw new Exception('Content is neither string nor :page');
-        }
-        $Content->attachTo($Page);
-      }
-      return (string) $Content;
+      return (string) Helper::renderPage($PageName);
     }
   }
 }

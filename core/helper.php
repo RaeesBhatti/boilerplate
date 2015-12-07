@@ -48,8 +48,7 @@ class Helper {
       if (APP_ENV === AppEnv::API) {
         $Content = json_encode(['status' => false, 'message' => "HTTP Error $e->httpCode", 'type' => 'http']);
       } else {
-        $ErrorPage = new Theme_Error();
-        return (string) $ErrorPage->render();
+        return (string) Helper::renderPage(Theme_Error::class);
       }
     }
     http_response_code($App->HTTPCode);
@@ -118,5 +117,16 @@ class Helper {
     } else {
       return $URL;
     }
+  }
+  public static function renderPage(classname<Page> $PageName): Stringish {
+    $Page = new $PageName();
+    $Content = $Page->render();
+    if (!is_string($Content)) {
+      if (!($Content instanceof :page)) {
+        throw new Exception('Content is neither string nor :page');
+      }
+      $Content->attachTo($Page);
+    }
+    return $Content;
   }
 }
