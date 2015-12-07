@@ -61,7 +61,8 @@ class Helper {
     'name' => string
   )> $dependencies): Vector<shape(
     'src' => string,
-    'name' => string
+    'name' => string,
+    'dependents' => int
   )> {
     $resolved = Vector{};
     $unresolved = [];
@@ -71,7 +72,8 @@ class Helper {
         'name' => $dep['name'],
         'dependencies' => $dep['dependencies'],
         'src' => $dep['src'],
-        'disposed' => false
+        'disposed' => false,
+        'dependents' => 0
       );
     }
 
@@ -79,6 +81,8 @@ class Helper {
       foreach($dep['dependencies'] as $entry) {
         if (!array_key_exists($entry, $unresolved)) {
           throw new Exception("Can not resolve dependency $entry of $dep[name]");
+        } else {
+          $unresolved[$entry]['dependents']++;
         }
       }
     }
