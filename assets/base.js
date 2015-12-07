@@ -19,7 +19,7 @@
 
     const Callable = function(Param) {
       if (!InProgress) {
-        const ReturnValue = callback.call(this, arg)
+        const ReturnValue = Callback.call(this, Param)
         InProgress = true
 
         if (ReturnValue && ReturnValue.constructor.name === 'Promise') {
@@ -34,7 +34,7 @@
     }
 
     Callable.prototype = Callable.prototype
-    return callable
+    return Callable
   }
 
   function getElements(form) {
