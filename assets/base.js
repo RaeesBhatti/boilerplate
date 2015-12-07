@@ -27,6 +27,7 @@
             InProgress = false
           }, function(e) {
             console.error(e)
+            InProgress = false
           })
 
         } else InProgress = false
