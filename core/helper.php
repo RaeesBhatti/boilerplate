@@ -35,6 +35,10 @@ class Helper {
     try {
       try {
         $Content = $App->execute(HTTP::assert($method));
+      } catch (APIFieldMultiException $e) {
+        $Content = json_encode(['status' => false, 'fields' => array_map(function(APIFieldException $Error) {
+          return ['name' => $Error->name, 'message' => $Error->getMessage()];
+        }, $e->Errors)]);
       } catch (APIException $e) {
         $Content = Helper::apiEncode($e);
       } catch (HTTPException $e) {

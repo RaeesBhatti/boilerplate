@@ -6,6 +6,20 @@ class APIException extends ErrorException {
     parent::__construct($message);
   }
 }
+
+class APIFieldException extends ErrorException {
+  public function __construct(public string $name = '', ?string $message = null) {
+    parent::__construct();
+    $this->message = $message === null ? 'Please enter a valid '. $name : $message;
+  }
+}
+
+class APIFieldMultiException extends ErrorException {
+  public function __construct(public array<APIFieldException> $Errors) {
+    parent::__construct();
+  }
+}
+
 class HTTPException extends ErrorException {
   public int $httpCode;
   public function __construct(int $code) {
