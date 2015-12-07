@@ -37,5 +37,13 @@
     return callable
   }
 
-  window.App = {lock, ajax}
+  function getElements(form) {
+    const elements = {}
+    Array.prototype.forEach.call(form.querySelectorAll('[name]'), function(element) {
+      elements[element.name] = element
+    })
+    return elements
+  }
+
+  window.App = {lock, ajax, getElements}
 })(window)
