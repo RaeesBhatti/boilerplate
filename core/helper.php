@@ -112,7 +112,6 @@ class Helper {
 
     return $resolved;
   }
-
   public static function toAbsolute(string $URL): string {
     if ($URL[0] === '/') {
       return AppConfig::ASSETS_PREFIX . $URL;
