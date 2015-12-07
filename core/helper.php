@@ -55,4 +55,57 @@ class Helper {
     http_response_code($App->HTTPCode);
     return $Content;
   }
+  public static function organizeDependencies(array<shape(
+    'src' => string,
+    'dependencies' => Set<string>,
+    'name' => string
+  )> $dependencies): Vector<shape(
+    'src' => string,
+    'name' => string
+  )> {
+    $resolved = Vector{};
+    $unresolved = [];
+
+    foreach($dependencies as $dep) {
+      $unresolved[$dep['name']] = shape(
+        'name' => $dep['name'],
+        'dependencies' => $dep['dependencies'],
+        'src' => $dep['src'],
+        'disposed' => false
+      );
+    }
+
+    foreach($dependencies as $dep) {
+      foreach($dep['dependencies'] as $entry) {
+        if (!array_key_exists($entry, $unresolved)) {
+          throw new Exception("Can not resolve dependency $entry of $dep[name]");
+        }
+      }
+    }
+
+    $dependencyCount = count($unresolved);
+    $resolvedCount = 0;
+    while ($resolvedCount !== $dependencyCount) {
+      $foundOne = false;
+      foreach ($unresolved as $key => $dep) {
+        if (!$dep['disposed']) {
+          $allResolved = true;
+          foreach($dep['dependencies'] as $dependency) {
+            $allResolved = $allResolved && $unresolved[$dependency]['disposed'];
+          }
+          if ($allResolved) {
+            $foundOne = true;
+            $resolvedCount++;
+            $resolved->add($dep);
+            $unresolved[$key]['disposed'] = true;
+          }
+        }
+      }
+      if (!$foundOne) {
+        throw new Exception('Unable to resolve dependencies');
+      }
+    }
+
+    return $resolved;
+  }
 }
