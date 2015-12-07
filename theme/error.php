@@ -3,11 +3,12 @@ class Theme_Error extends Page {
   public function __construct(): void {
 
   }
-  public function render(): :html {
+  public function render(): :page {
     $errorCode = App::getInstance()->HTTPCode;
-    return <html>
-      <head></head>
-      <body>HTTP Error {$errorCode}</body>
-    </html>;
+    return <page>
+      <page-content>
+        HTTP Error {$errorCode}
+      </page-content>
+    </page>;
   }
 }
