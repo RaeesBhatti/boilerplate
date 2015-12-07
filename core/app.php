@@ -58,7 +58,7 @@ class App {
       throw new HTTPException(500);
     }
   }
-  public function getUser(): User {
+  public function getUser(): ?User {
     $session = $this->getSession();
     if ($session->exists('UserID')) {
       $id = $session->get('UserID', 0);
@@ -69,7 +69,7 @@ class App {
         $session->unset('UserID');
       }
     }
-    throw new Exception('User is not logged in');
+    return null;
   }
   public function execute(HTTP $Method): string {
     $RouterTheme = new Router();
