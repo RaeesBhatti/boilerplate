@@ -28,6 +28,7 @@ if (APP_DEBUG) {
   ini_set('display_errors', 1);
 }
 
+require(APP_ROOT.'/external/db/src/autoload.hh');
 require(APP_ROOT.'/external/xhp/init.php');
 spl_autoload_register(function($Name) {
 
