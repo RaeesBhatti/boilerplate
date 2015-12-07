@@ -48,7 +48,11 @@ class Helper {
       if (APP_ENV === AppEnv::API) {
         $Content = json_encode(['status' => false, 'message' => "HTTP Error $e->httpCode", 'type' => 'http']);
       } else {
-        return (string) Helper::renderPage(Theme_Error::class);
+        $Content = (string) Helper::renderPage(Theme_Error::class);
+      }
+
+      if ($e instanceof HTTPRedirectException) {
+        header('Location: '.$e->redirectUri);
       }
     }
     http_response_code($App->HTTPCode);
