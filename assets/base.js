@@ -13,6 +13,29 @@
     })
   }
 
+  function handleAjaxResponse(Callback, form, elements) {
+    const Callable = function(RawResponse) {
+      let Response = null
+      try {
+        Response = JSON.parse(RawResponse)
+      } catch (_) {
+        throw new Error('Unable to parse response from server')
+      }
+      if (Response.status) {
+        Callback(Response)
+      } else if (Response.message) {
+        alert(Response.message)
+      } else if (Response.fields) {
+        Response.fields.forEach(function(field) {
+          // TODO: Show this message above fields
+          alert(field.name + ': ' + field.message);
+        })
+      } else {
+        console.log('Unknown response type', Response)
+      }
+    }
+    return Callable
+  }
 
   function lock(Callback) {
     let InProgress = false
@@ -34,7 +57,6 @@
       }
     }
 
-    Callable.prototype = Callable.prototype
     return Callable
   }
 
@@ -56,5 +78,5 @@
     return values
   }
 
-  window.App = {lock, ajax, getElements, getValues}
+  window.App = {lock, ajax, getElements, getValues, handleAjaxResponse}
 })(window)
