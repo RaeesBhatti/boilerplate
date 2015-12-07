@@ -9,6 +9,16 @@ class Helper {
       return trim((string) $Value);
     }
   }
+  public static function Random():int{
+    return mt_rand(RAND_MAX/9, RAND_MAX);
+  }
+  public static function RandomPassword():string{
+    return (string) password_hash((string) static::Random(), PASSWORD_DEFAULT);
+  }
+  public static function RandomCryptic(): string {
+    return str_replace(['$', '\\', '/', '.'], '', static::RandomPassword());
+  }
+
   // For API use only
   public static function validateFields(ImmSet<string> $Fields, array<string, string> $Post): void {
     foreach ($Fields as $FieldName) {
