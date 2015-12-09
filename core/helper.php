@@ -82,7 +82,7 @@ class Helper {
   }
   public static function organizeDependencies(array<shape(
     'src' => string,
-    'dependencies' => Set<string>,
+    'dependencies' => ImmSet<string>,
     'name' => string
   )> $dependencies): Vector<shape(
     'src' => string,

@@ -4,7 +4,7 @@ class :page-style extends :x:primitive {
   public static int $Number = 0;
 
   attribute
-    Set<string> dependencies = Set{},
+    ImmSet<string> dependencies = ImmSet{},
     Stringish name,
     Stringish src @required;
   public function getName(): string {
@@ -14,7 +14,7 @@ class :page-style extends :x:primitive {
     }
     return (string) $name;
   }
-  public function getDependencies(): Set<string> {
+  public function getDependencies(): ImmSet<string> {
     return $this->:dependencies;
   }
   public function getSource(): string {

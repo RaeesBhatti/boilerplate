@@ -9,22 +9,22 @@ function runAppHelperTests(): void {
           shape(
             'src' => 'd.js',
             'name' => 'd',
-            'dependencies' => Set{'a', 'c'}
+            'dependencies' => ImmSet{'a', 'c'}
           ),
           shape(
             'src' => 'b.js',
             'name' => 'b',
-            'dependencies' => Set{'a'},
+            'dependencies' => ImmSet{'a'},
           ),
           shape(
             'src' => 'a.js',
             'name' => 'a',
-            'dependencies' => Set{}
+            'dependencies' => ImmSet{}
           ),
           shape(
             'src' => 'c.js',
             'name' => 'c',
-            'dependencies' => Set{}
+            'dependencies' => ImmSet{}
           )
         ];
         $organized = Helper::organizeDependencies($dependencies);
