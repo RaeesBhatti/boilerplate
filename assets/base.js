@@ -68,6 +68,12 @@
     return elements
   }
 
+  function clearElements(elements) {
+    for (const key in elements) {
+      elements[key].value = null
+    }
+  }
+
   function getValues(elements) {
     const values = {}
     for (const key in elements) {
@@ -78,5 +84,5 @@
     return values
   }
 
-  window.App = {lock, ajax, getElements, getValues, handleAjaxResponse}
+  window.App = {lock, ajax, getElements, getValues, handleAjaxResponse, clearElements}
 })(window)
