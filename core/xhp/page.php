@@ -40,7 +40,7 @@ class :page extends :x:element {
     }
 
     foreach(Helper::organizeDependencies($Scripts) as $Script) {
-      $Footer[] = <script async={$Script['dependents'] === 0} src={Helper::toAbsolute($Script['src'])}></script>;
+      $Footer[] = <script async={$Script['dependents'] === 0 && !$Script['dependencies']->count()} src={Helper::toAbsolute($Script['src'])}></script>;
     }
     foreach(Helper::organizeDependencies($Styles) as $Style) {
       $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAbsolute($Style['src'])} />;

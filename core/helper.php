@@ -87,7 +87,8 @@ class Helper {
   )> $dependencies): Vector<shape(
     'src' => string,
     'name' => string,
-    'dependents' => int
+    'dependents' => int,
+    'dependencies' => ImmSet<string>
   )> {
     $resolved = Vector{};
     $unresolved = [];
