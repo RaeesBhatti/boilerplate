@@ -105,7 +105,7 @@ class Helper {
     foreach($dependencies as $dep) {
       foreach($dep['dependencies'] as $entry) {
         if (!array_key_exists($entry, $unresolved)) {
-          throw new Exception("Can not resolve dependency $entry of $dep[name]");
+          throw new Exception("Can not resolve dependency `$entry` of `$dep[name]`");
         } else {
           $unresolved[$entry]['dependents']++;
         }
