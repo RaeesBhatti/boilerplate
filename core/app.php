@@ -75,10 +75,16 @@ class App {
     $RouterTheme = new Router();
     $RouterTheme->registerTheme(Theme_Guest_Main::class);
 
-    $ThemeName = $RouterTheme->executeTheme($this->Server['REQUEST_URI']);
+    $RelativeURL = $this->URL;
+    if (APP_ENV === AppEnv::API) {
+      // Trim "/api" from the beginning
+      $RelativeURL = substr($RelativeURL, 4);
+    }
+
+    $ThemeName = $RouterTheme->executeTheme($RelativeURL);
     $Theme = new $ThemeName();
 
-    $ChoppedURL = substr($this->URL, strlen($Theme::PREFIX));
+    $ChoppedURL = substr($RelativeURL, strlen($Theme::PREFIX));
     if ($ChoppedURL === false) {
       if (substr($this->URL, 0 -1) !== '/') {
         throw new HTTPRedirectException($this->URL . '/');
