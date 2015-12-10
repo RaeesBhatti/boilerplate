@@ -9,6 +9,22 @@ class Helper {
       return trim((string) $Value);
     }
   }
+  public static function validateReferer(): bool {
+    $Error = false;
+    $Server = App::getInstance()->Server;
+    if (!array_key_exists('HTTP_REFERER', $Server)){
+      $Error = true;
+    } else {
+      try {
+        $URL = parse_url($Server['HTTP_REFERER']);
+        if (!$URL || !array_key_exists('host', $URL) || $URL['host'] !== $Server['SERVER_NAME']) {
+          $Error = true;
+        }
+      } catch(Exception $e) { $Error = true; }
+    }
+    return !$Error;
+  }
+
   public static function Random():int{
     return mt_rand(RAND_MAX/9, RAND_MAX);
   }
