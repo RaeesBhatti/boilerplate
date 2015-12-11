@@ -83,9 +83,11 @@ class Router<T> {
     }
     foreach ($RequiredURI as $Index => $Clause) {
       if ($Clause === '*') {
-        return true;
+        continue;
       } else {
-        return $Clause === $Chunks[$Index];
+        if ($Clause !== $Chunks[$Index]) {
+          return false;
+        }
       }
     }
     return true;
