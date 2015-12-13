@@ -37,7 +37,7 @@ class :page extends :x:element {
       } else if ($child instanceof :page-title) {
         $Page->Title = $child->stringify();
       } else if ($child instanceof :page-head) {
-        $Header[] = $child;
+        $Header[] = $child->renderChildren();
       }
     }
 
