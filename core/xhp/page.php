@@ -4,7 +4,7 @@ class :page extends :x:element {
   attribute
     Stringish lang = 'en',
     Stringish class;
-  children (:page-title*, :page-script*, :page-style*, :page-content*);
+  children (:page-content | :page-head | :page-script | :page-style | :page-title)*;
   private ?Page $Page = null;
   public function attachTo(Page $Page): void {
     $this->Page = $Page;
@@ -36,6 +36,8 @@ class :page extends :x:element {
         $Content = (string) :xhp::renderChild($child);
       } else if ($child instanceof :page-title) {
         $Page->Title = $child->stringify();
+      } else if ($child instanceof :page-head) {
+        $Header[] = $child;
       }
     }
 
