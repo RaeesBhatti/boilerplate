@@ -1,6 +1,5 @@
 <?hh //strict
 class :page-head extends :x:primitive {
-  category %metadata;
   public function renderChildren(): XHPRoot {
     $Content = '';
     foreach($this->getChildren() as $child) {
