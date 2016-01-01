@@ -52,7 +52,7 @@ class Router<T> {
     throw new Exception('Theme not found');
   }
 
-  public function execute(HTTP $Term, string $URI, ?array<string> $URIChunks = null): T {
+  public function execute(HTTP $Term, string $URI, ?array<string> $URIChunks = null, string $PrefixURL = ''): T {
     if ($URIChunks === null) {
       $URIChunks = Helper::uriToChunks($URI);
     }
@@ -67,7 +67,7 @@ class Router<T> {
       if ($this->validate($RequiredURI, $URIChunks)) {
         if ($URLIsDirectory !== $isDirectory) {
           $Get = App::getInstance()->Get;
-          $NewURL = $URI . ($isDirectory ? '/' : '');
+          $NewURL = $PrefixURL . $URI . ($isDirectory ? '/' : '');
           throw new HTTPRedirectException($NewURL);
         } else {
           return $Callback;

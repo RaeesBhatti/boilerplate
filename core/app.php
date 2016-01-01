@@ -84,6 +84,7 @@ class App {
     $ThemeName = $RouterTheme->executeTheme($RelativeURL);
     $Theme = new $ThemeName();
 
+    $PrefixURL = (string) substr($RelativeURL, 0, strlen($Theme::PREFIX));
     $ChoppedURL = substr($RelativeURL, strlen($Theme::PREFIX));
     if ($ChoppedURL === false) {
       if (substr($this->URL, 0 -1) !== '/') {
@@ -95,12 +96,12 @@ class App {
     if (APP_ENV === AppEnv::API) {
       $Router = new Router();
       $Theme->registerAPI($Router);
-      $Callback = $Router->execute($Method, $ChoppedURL);
+      $Callback = $Router->execute($Method, $ChoppedURL, null, $PrefixURL);
       return Helper::apiEncode($Callback());
     } else {
       $Router = new Router();
       $Theme->registerWeb($Router);
-      $PageName = $Router->execute($Method, $ChoppedURL);
+      $PageName = $Router->execute($Method, $ChoppedURL, null, $PrefixURL);
       return (string) Helper::renderPage($PageName);
     }
   }
