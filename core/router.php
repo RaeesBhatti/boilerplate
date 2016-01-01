@@ -14,6 +14,7 @@ class Router<T> {
       HTTP::POST => [],
       HTTP::PUT => [],
       HTTP::DELETE => [],
+      HTTP::PATCH => []
     ];
   }
 
@@ -23,6 +24,10 @@ class Router<T> {
 
   public function post(array<string> $URI,  T $Callback, bool $isDirectory = false): this {
     return $this->route(HTTP::POST, $URI, $Callback, $isDirectory);
+  }
+
+  public function patch(array<string> $URI, T $Callback, bool $isDirectory = false): this {
+    return $this->route(HTTP::PATCH, $URI, $Callback, $isDirectory);
   }
 
   public function put(array<string> $URI, T $Callback, bool $isDirectory = false): this {

@@ -4,6 +4,7 @@ enum HTTP: string as string {
   POST = 'POST';
   PUT = 'PUT';
   DELETE = 'DELETE';
+  PATCH = 'PATCH';
 }
 enum AppEnv: string as string {
   API = 'API';
