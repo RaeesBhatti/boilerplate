@@ -83,12 +83,22 @@ class Router<T> {
   }
 
   private function validate(array<string> $RequiredURI, array<string> $Chunks): bool {
+    $DB = null;
     if (count($RequiredURI) !== count($Chunks)) {
       return false;
     }
     foreach ($RequiredURI as $Index => $Clause) {
       if ($Clause === '*') {
         continue;
+      } else if (strpos($Clause, ':') !== false) {
+        list($Table, $Column) = explode(':', $Clause, 2);
+        if ($DB === null) {
+          $DB = App::getInstance()->getDB();
+        }
+        $Query = $DB->query("Select 1 from $Table where $Column = :value LIMIT 1", [':value' => $Chunks[$Index]]);
+        if (!$Query->rowCount()) {
+          return false;
+        }
       } else {
         if ($Clause !== $Chunks[$Index]) {
           return false;
