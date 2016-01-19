@@ -1,4 +1,6 @@
 .idea
+.vagrant
 .atom-hack
 /external/app.local
+/external/certs/
 /credentials.hh
