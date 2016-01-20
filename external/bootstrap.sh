@@ -14,5 +14,6 @@ echo 'hhvm.hack.lang.look_for_typechecker = false' >> /etc/hhvm/php.ini
 echo 'expose_php = false' >> /etc/hhvm/php.ini
 usermod -a -G www-data vagrant
 service hhvm restart
+rm -rf /etc/nginx/sites-enabled/default
 ln -s /vagrant/external/app.local /etc/nginx/conf.d/app.conf
 service nginx restart
