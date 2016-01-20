@@ -26,6 +26,7 @@ class App {
   private ?User $User;
   private ?MySQL $DB;
   private Session $Session;
+  private ?RedisNG $Redis;
   public function __construct(array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie) {
     $this->Session = new Session();
     $this->URL = array_key_exists('REQUEST_URI', $Server) ? explode('?', $Server['REQUEST_URI'])[0] : '';
@@ -53,6 +54,20 @@ class App {
         'Pass' => CONFIG_DB_PASS,
         'Name' => CONFIG_DB_NAME
       ));
+    } catch (Exception $e) {
+      error_log($e->getMessage(). "\n" . $e->getTraceAsString());
+      throw new HTTPException(500);
+    }
+  }
+  public function getRedis(): RedisNG {
+    if ($this->Redis !== null) {
+      return $this->Redis;
+    }
+    try {
+      $Redis = $this->Redis = new RedisNG();
+      $Redis = new RedisNG();
+      $Redis->connect(CONFIG_REDIS_HOST, CONFIG_REDIS_PORT);
+      return $Redis;
     } catch (Exception $e) {
       error_log($e->getMessage(). "\n" . $e->getTraceAsString());
       throw new HTTPException(500);
