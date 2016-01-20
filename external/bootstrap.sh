@@ -3,7 +3,7 @@ print "\n" | add-apt-repository ppa:nginx/development
 apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
 add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 apt-get update
-apt-get install hhvm nginx -y --force-yes
+apt-get install nginx hhvm -y --force-yes
 sed -i 's/user www-data;/user vagrant;/' /etc/nginx/nginx.conf
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
