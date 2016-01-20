@@ -48,7 +48,7 @@ class App {
     }
     try {
       return $this->DB = MySQL::create(shape(
-        'Host' => 'localhost',
+        'Host' => CONFIG_DB_HOST,
         'User' => CONFIG_DB_USER,
         'Pass' => CONFIG_DB_PASS,
         'Name' => CONFIG_DB_NAME
