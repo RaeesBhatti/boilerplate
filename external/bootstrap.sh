@@ -9,8 +9,10 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo apt-get install mysql-server -y --force-yes
 update-rc.d hhvm defaults
-echo 'hhvm.hack.lang.look_for_typechecker = false' >> /etc/hhvm/server.ini
-echo 'expose_php = false' >> /etc/hhvm/server.ini
+sed -i 's/hhvm.server.port = 9000/hhvm.server.file_socket = \/var\/run\/hhvm\/hhvm.sock/' /etc/hhvm/server.ini
+echo 'hhvm.hack.lang.look_for_typechecker = false' >> /etc/hhvm/php.ini
+echo 'expose_php = false' >> /etc/hhvm/php.ini
+usermod -a -G www-data vagrant
 service hhvm restart
 ln -s /vagrant/external/app.local /etc/nginx/conf.d/app.conf
 service nginx restart
