@@ -4,3 +4,6 @@
 [submodule "external/db"]
 	path = external/db
 	url = https://github.com/steelbrain/PDO-Mysql
+[submodule "external/redis"]
+	path = external/redis
+	url = https://github.com/steelbrain/RedisNG.git
