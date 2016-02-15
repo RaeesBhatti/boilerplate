@@ -2,5 +2,6 @@
 .vagrant
 .atom-hack
 /external/app.local
+/external/app.local.ini
 /external/certs/
 /credentials.hh
