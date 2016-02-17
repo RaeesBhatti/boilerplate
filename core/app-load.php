@@ -31,6 +31,9 @@ if (APP_DEBUG) {
 require(APP_ROOT.'/external/redis/autoload.php');
 require(APP_ROOT.'/external/db/src/autoload.hh');
 require(APP_ROOT.'/external/xhp/init.php');
+require(APP_ROOT.'/external/mongo-php-library/src/functions.php');
+require(APP_ROOT.'/external/mongo-php-library/src/Model/BSONDocument.php');
+require(APP_ROOT.'/external/mongo-php-library/src/Model/BSONArray.php');
 spl_autoload_register(function($Name) {
 
   if (substr($Name, 0, 4) === 'xhp_') {
@@ -44,6 +47,14 @@ spl_autoload_register(function($Name) {
 
   if ($FilePath !== null && file_exists($FilePath)) {
     require($FilePath);
+  }
+});
+spl_autoload_register(function($Name){
+  // MongoDB library
+  if(substr($Name, 0, 7) !== 'MongoDB') return;
+  $Path = APP_ROOT.'/external/mongo-php-library/src/'.str_replace("\\", '/', substr($Name, 8)).'.php';
+  if(file_exists($Path)){
+    require($Path);
   }
 });
 
