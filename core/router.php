@@ -95,8 +95,8 @@ class Router<T> {
         if ($DB === null) {
           $DB = App::getInstance()->getDB();
         }
-        $Query = $DB->query("Select 1 from $Table where $Column = :value LIMIT 1", [':value' => $Chunks[$Index]]);
-        if (!$Query->rowCount()) {
+        $Query = $DB->selectCollection($Table)->findOne([$Column => $Chunks[$Index]]);
+        if ($Query === NULL) {
           return false;
         }
       } else {

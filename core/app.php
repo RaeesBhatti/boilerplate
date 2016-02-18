@@ -1,7 +1,5 @@
 <?hh //strict
 
-use steelbrain\MySQL;
-
 class App {
   public static ?App $Instance = null;
 
@@ -24,7 +22,7 @@ class App {
 
   // Instances
   private ?User $User;
-  private ?MySQL $DB;
+  private ?MongoDB\Database $DB;
   private Session $Session;
   private ?RedisNG $Redis;
   public function __construct(array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie) {
@@ -43,17 +41,12 @@ class App {
     }
     return $this->Session = new Session();
   }
-  public function getDB(): steelbrain\MySQL {
+  public function getDB(): MongoDB\Database {
     if ($this->DB !== null) {
       return $this->DB;
     }
     try {
-      return $this->DB = MySQL::create(shape(
-        'Host' => CONFIG_DB_HOST,
-        'User' => CONFIG_DB_USER,
-        'Pass' => CONFIG_DB_PASS,
-        'Name' => CONFIG_DB_NAME
-      ));
+      return $this->DB = (new MongoDB\Client())->selectDatabase('app', ["readConcern" => new MongoDB\Driver\ReadConcern('local')]);
     } catch (Exception $e) {
       error_log($e->getMessage(). "\n" . $e->getTraceAsString());
       throw new HTTPException(500);
@@ -77,7 +70,7 @@ class App {
     $session = $this->getSession();
     if ($session->exists('UserID')) {
       $id = $session->get('UserID', 0);
-      $user = $this->getDB()->from('users')->select('id')->where(['id' => $id])->get();
+      $user = $this->getDB()->selectCollection('users')->findOne(['id' => $id]);
       if ($user !== null) {
         return $this->User = $user;
       } else {
