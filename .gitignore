@@ -1,6 +1,7 @@
 .idea
 .vagrant
 .atom-hack
+www.pid
 /external/app.local
 /external/app.local.ini
 /external/certs/
