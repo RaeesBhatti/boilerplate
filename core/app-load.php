@@ -29,7 +29,6 @@ if (APP_DEBUG) {
 }
 
 require(APP_ROOT.'/external/redis/autoload.php');
-require(APP_ROOT.'/external/db/src/autoload.hh');
 require(APP_ROOT.'/external/xhp/init.php');
 require(APP_ROOT.'/external/mongo-php-library/src/functions.php');
 require(APP_ROOT.'/external/mongo-php-library/src/Model/BSONDocument.php');

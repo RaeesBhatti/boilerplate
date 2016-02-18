@@ -1,9 +1,6 @@
 [submodule "external/xhp"]
 	path = external/xhp
 	url = https://github.com/facebook/xhp-lib.git
-[submodule "external/db"]
-	path = external/db
-	url = https://github.com/steelbrain/PDO-Mysql
 [submodule "external/redis"]
 	path = external/redis
 	url = https://github.com/steelbrain/RedisNG.git
