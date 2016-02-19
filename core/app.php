@@ -46,7 +46,11 @@ class App {
       return $this->DB;
     }
     try {
-      return $this->DB = (new MongoDB\Client())->selectDatabase('app', ["readConcern" => new MongoDB\Driver\ReadConcern('local')]);
+      if(CONFIG_DB_USER !== ''){
+        return $this->DB = (new MongoDB\Client('mongodb://'.CONFIG_DB_USER.':'.CONFIG_DB_PASS.'@'.CONFIG_DB_HOST.':'.CONFIG_DB_PORT.'/'))->selectDatabase(CONFIG_DB_NAME, ["readConcern" => new MongoDB\Driver\ReadConcern('local')]);
+      } else {
+        return $this->DB = (new MongoDB\Client('mongodb://'.CONFIG_DB_HOST.':'.CONFIG_DB_PORT.'/'))->selectDatabase(CONFIG_DB_NAME, ["readConcern" => new MongoDB\Driver\ReadConcern('local')]);
+      }
     } catch (Exception $e) {
       error_log($e->getMessage(). "\n" . $e->getTraceAsString());
       throw new HTTPException(500);
