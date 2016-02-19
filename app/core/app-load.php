@@ -4,6 +4,7 @@ ignore_user_abort(true);
 set_time_limit(300);
 define('RAND_MAX', mt_getrandmax());
 define('APP_ROOT', __DIR__.'/..');
+define('EXTERNAL_ROOT', __DIR__.'/../../external');
 define('APP_IN_CLI', !array_key_exists('REMOTE_ADDR', $_SERVER));
 define('APP_DEBUG', !APP_IN_CLI && $_SERVER['REMOTE_ADDR'] === '127.0.0.1');
 
@@ -28,11 +29,11 @@ if (APP_DEBUG) {
   ini_set('display_errors', 1);
 }
 
-require(APP_ROOT.'/external/redis/autoload.php');
-require(APP_ROOT.'/external/xhp/init.php');
-require(APP_ROOT.'/external/mongo-php-library/src/functions.php');
-require(APP_ROOT.'/external/mongo-php-library/src/Model/BSONDocument.php');
-require(APP_ROOT.'/external/mongo-php-library/src/Model/BSONArray.php');
+require(EXTERNAL_ROOT.'/redis/autoload.php');
+require(EXTERNAL_ROOT.'/xhp/init.php');
+require(EXTERNAL_ROOT.'/mongo-php-library/src/functions.php');
+require(EXTERNAL_ROOT.'/mongo-php-library/src/Model/BSONDocument.php');
+require(EXTERNAL_ROOT.'/mongo-php-library/src/Model/BSONArray.php');
 spl_autoload_register(function($Name) {
 
   if (substr($Name, 0, 4) === 'xhp_') {

@@ -2,7 +2,7 @@
 .vagrant
 .atom-hack
 www.pid
-/external/app.local
-/external/app.local.ini
-/external/certs/
-/credentials.hh
+external/app.local
+external/app.local.ini
+external/certs
+app/credentials.hh
