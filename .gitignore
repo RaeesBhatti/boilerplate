@@ -3,6 +3,7 @@
 .atom-hack
 www.pid
 app/sitemap.xml
+node_modules
 external/app.local
 external/app.local.ini
 external/certs
