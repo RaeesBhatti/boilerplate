@@ -52,7 +52,7 @@ spl_autoload_register(function($Name) {
 spl_autoload_register(function($Name){
   // MongoDB library
   if(substr($Name, 0, 7) !== 'MongoDB') return;
-  $Path = APP_ROOT.'/external/mongo-php-library/src/'.str_replace("\\", '/', substr($Name, 8)).'.php';
+  $Path = EXTERNAL_ROOT.'/mongo-php-library/src/'.str_replace("\\", '/', substr($Name, 8)).'.php';
   if(file_exists($Path)){
     require($Path);
   }
