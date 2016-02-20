@@ -2,6 +2,7 @@
 .vagrant
 .atom-hack
 www.pid
+app/sitemap.xml
 external/app.local
 external/app.local.ini
 external/certs
