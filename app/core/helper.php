@@ -156,7 +156,7 @@ class Helper {
   }
   public static function toAbsolute(string $URL): string {
     if ($URL[0] !== '/') {
-      return AppConfig::ASSETS_PREFIX . $URL;
+      return array_key_exists('HTTPS', App::getInstance()->Server) ? 'https://'.ASSETS_PREFIX . $URL : '//'.ASSETS_PREFIX . $URL;
     } else {
       return $URL;
     }

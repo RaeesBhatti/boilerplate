@@ -11,6 +11,5 @@ enum AppEnv: string as string {
   UNIT_TESTS = 'UNIT_TESTS';
   MAIN = 'MAIN';
 }
-enum AppConfig: string as string {
-  ASSETS_PREFIX = '/';
-}
+const string ASSETS_PREFIX = 'res.app.com/';
+const string HOSTNAME = 'app.com';
