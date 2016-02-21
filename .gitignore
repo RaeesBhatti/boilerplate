@@ -8,3 +8,4 @@ external/app.local
 external/app.local.ini
 external/certs
 external/credentials.hh
+external/mongodb.so
