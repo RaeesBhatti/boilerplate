@@ -10,6 +10,7 @@ class :page extends :x:element {
     $this->Page = $Page;
   }
   protected function render(): XHPRoot{
+    $LinkHeader = App::getInstance()->LinkHeader;
     $Page = $this->Page;
     invariant($Page !== null, 'No Page attached to :page');
 
@@ -21,17 +22,39 @@ class :page extends :x:element {
 
     foreach($this->getChildren() as $child) {
       if ($child instanceof :page-script) {
-        $Scripts[] = shape(
-          'name' => $child->getName(),
-          'src' => $child->getSource(),
-          'dependencies' => $child->getDependencies()
-        );
+        if (Helper::isSecure() && $child->getChildren()->count()) {
+          foreach($child->getChildren() as $child) {
+            invariant($child instanceof :page-script, 'Child in :page-script is not :page-script');
+            $Scripts[] = shape(
+              'name' => $child->getName(),
+              'src' => $child->getSource(),
+              'dependencies' => $child->getDependencies()
+            );
+          }
+        } else {
+          $Scripts[] = shape(
+            'name' => $child->getName(),
+            'src' => $child->getSource(),
+            'dependencies' => $child->getDependencies()
+          );
+        }
       } else if ($child instanceof :page-style) {
-        $Styles[] = shape(
-          'name' => $child->getName(),
-          'src' => $child->getSource(),
-          'dependencies' => $child->getDependencies()
-        );
+        if (Helper::isSecure() && $child->getChildren()->count()) {
+          foreach($child->getChildren() as $child) {
+            invariant($child instanceof :page-style, 'Child in :page-style is not :page-style');
+            $Styles[] = shape(
+              'name' => $child->getName(),
+              'src' => $child->getSource(),
+              'dependencies' => $child->getDependencies()
+            );
+          }
+        } else {
+          $Styles[] = shape(
+            'name' => $child->getName(),
+            'src' => $child->getSource(),
+            'dependencies' => $child->getDependencies()
+          );
+        }
       } else if ($child instanceof :page-content) {
         $Content = (string) :xhp::renderChild($child);
       } else if ($child instanceof :page-title) {
@@ -46,7 +69,9 @@ class :page extends :x:element {
     }
     foreach(Helper::organizeDependencies($Styles) as $Style) {
       $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAbsolute($Style['src'])} />;
+      $LinkHeader .= '<'.Helper::toAbsolute($Style['src']).'>; rel=stylesheet, ';
     }
+    header($LinkHeader);
 
     return
       <x:doctype>

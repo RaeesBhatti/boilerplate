@@ -7,6 +7,7 @@ class :page-script extends :x:primitive {
     ImmSet<string> dependencies = ImmSet{},
     Stringish name,
     Stringish src @required;
+  children (:page-script)*;
   public function getName(): string {
     $name = $this->:name;
     if($name === null){

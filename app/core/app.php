@@ -15,6 +15,7 @@ class App {
   public array<string, string> $Post;
   public array<string, string> $Server;
   public array<string, string> $Cookie;
+  public string $LinkHeader;
   public int $HTTPCode = 200;
   public string $URL;
   public array<string> $URLChunks;
@@ -33,6 +34,7 @@ class App {
     $this->Post = array_map(class_meth('Helper', 'trim'), $Post);
     $this->Server = array_map(class_meth('Helper', 'trim'), $Server);
     $this->Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
+    $this->LinkHeader = 'Link: ';
   }
   // Getters
   public function getSession(): Session {

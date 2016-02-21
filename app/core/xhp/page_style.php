@@ -7,6 +7,7 @@ class :page-style extends :x:primitive {
     ImmSet<string> dependencies = ImmSet{},
     Stringish name,
     Stringish src @required;
+  children (:page-style)*;
   public function getName(): string {
     $name = $this->:name;
     if($name === null){
