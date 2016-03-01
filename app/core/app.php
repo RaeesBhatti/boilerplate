@@ -35,6 +35,7 @@ class App {
     $this->Server = array_map(class_meth('Helper', 'trim'), $Server);
     $this->Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
     $this->LinkHeader = 'Link: ';
+    $this->Env = array_key_exists('ENV', $this->Server) && $this->Server['ENV'] === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
   }
   // Getters
   public function getSession(): Session {
