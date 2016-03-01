@@ -1,6 +1,7 @@
 .idea
 .vagrant
 .atom-hack
+.notes
 www.pid
 app/sitemap.xml
 node_modules
