@@ -20,6 +20,8 @@ class App {
   public string $URL;
   public array<string> $URLChunks;
   public int $UserID = 0;
+  public string $Env;
+  public bool $isH2;
 
   // Instances
   private ?User $User;
@@ -36,6 +38,7 @@ class App {
     $this->Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
     $this->LinkHeader = 'Link: ';
     $this->Env = array_key_exists('ENV', $this->Server) && $this->Server['ENV'] === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
+    $this->isH2 = array_key_exists('H2', $this->Server) && $this->Server['H2'] !== '' ? true : false;
   }
   // Getters
   public function getSession(): Session {

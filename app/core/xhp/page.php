@@ -10,7 +10,7 @@ class :page extends :x:element {
     $this->Page = $Page;
   }
   protected function render(): XHPRoot{
-    $LinkHeader = App::getInstance()->LinkHeader;
+    $App = App::getInstance();
     $Page = $this->Page;
     invariant($Page !== null, 'No Page attached to :page');
 
@@ -22,7 +22,7 @@ class :page extends :x:element {
 
     foreach($this->getChildren() as $child) {
       if ($child instanceof :page-script) {
-        if (Helper::isSecure() && $child->getChildren()->count()) {
+        if ($App->isH2 && $child->getChildren()->count()) {
           foreach($child->getChildren() as $child) {
             invariant($child instanceof :page-script, 'Child in :page-script is not :page-script');
             $Scripts[] = shape(
@@ -39,7 +39,7 @@ class :page extends :x:element {
           );
         }
       } else if ($child instanceof :page-style) {
-        if (Helper::isSecure() && $child->getChildren()->count()) {
+        if ($App->isH2 && $child->getChildren()->count()) {
           foreach($child->getChildren() as $child) {
             invariant($child instanceof :page-style, 'Child in :page-style is not :page-style');
             $Styles[] = shape(
@@ -69,9 +69,9 @@ class :page extends :x:element {
     }
     foreach(Helper::organizeDependencies($Styles) as $Style) {
       $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAbsolute($Style['src'])} />;
-      $LinkHeader .= '<'.Helper::toAbsolute($Style['src']).'>; rel=stylesheet, ';
+      $App->LinkHeader .= '<'.Helper::toAbsolute($Style['src']).'>; rel=stylesheet, ';
     }
-    header($LinkHeader);
+    header($App->LinkHeader);
 
     return
       <x:doctype>
