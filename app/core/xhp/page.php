@@ -65,11 +65,11 @@ class :page extends :x:element {
     }
 
     foreach(Helper::organizeDependencies($Scripts) as $Script) {
-      $Footer[] = <script defer={$Script['dependents'] === 0 && !$Script['dependencies']->count()} src={Helper::toAbsolute($Script['src'])}></script>;
+      $Footer[] = <script defer={$Script['dependents'] === 0 && !$Script['dependencies']->count()} src={Helper::toAssets($Script['src'])}></script>;
     }
     foreach(Helper::organizeDependencies($Styles) as $Style) {
-      $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAbsolute($Style['src'])} />;
-      $App->LinkHeader .= '<'.Helper::toAbsolute($Style['src']).'>; rel=stylesheet, ';
+      $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAssets($Style['src'])} />;
+      $App->LinkHeader .= '<'.Helper::toAssets($Style['src']).'>; rel=stylesheet, ';
     }
     header($App->LinkHeader);
 
