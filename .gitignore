@@ -7,5 +7,5 @@ app/sitemap.xml
 node_modules
 external/app.local*
 external/certs
-external/credentials.hh
+external/credentials.php
 external/mongodb.so
