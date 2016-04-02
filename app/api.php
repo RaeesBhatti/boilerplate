@@ -1,7 +1,7 @@
 <?php
 define('APP_ENV', 'API');
 require(__DIR__.'/core/app-load.php');
-header('Content-Type: application/json; charset=utf-8');
+header('Content-Type: application/json');
 
 if (!array_key_exists('HTTP_X_AUTH', $_SERVER)) {
   http_response_code(400);
