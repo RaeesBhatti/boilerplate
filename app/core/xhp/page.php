@@ -77,8 +77,8 @@ class :page extends :x:element {
       <x:doctype>
         <html lang={$this->:lang}>
           <head>
-            <title>{$Page->Title}</title>
             <meta charset="UTF-8" />
+            <title>{$Page->Title}</title>
             {$Header}
           </head>
           <body class={$this->:class}>
