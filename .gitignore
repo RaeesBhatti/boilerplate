@@ -2,6 +2,7 @@
 .vagrant
 .atom-hack
 .notes
+.DS_Store
 www.pid
 app/sitemap.xml
 node_modules
