@@ -2,7 +2,7 @@
   'use strict'
   function ajax(Url, Method, Contents) {
     return new Promise(function(resolve, reject) {
-      const XHR = new XMLHttpRequest()
+      let XHR = new XMLHttpRequest()
       XHR.open(Method, Url, true)
       XHR.addEventListener('load', () => {
         resolve(XHR.responseText)
@@ -14,7 +14,7 @@
   }
 
   function handleAjaxResponse(Callback, form, elements) {
-    const Callable = function(RawResponse) {
+    return function (RawResponse) {
       let Response = null
       try {
         Response = JSON.parse(RawResponse)
@@ -26,7 +26,7 @@
       } else if (Response.message) {
         alert(Response.message)
       } else if (Response.fields) {
-        Response.fields.forEach(function(field) {
+        Response.fields.forEach(function (field) {
           // TODO: Show this message above fields
           alert(field.name + ': ' + field.message);
         })
@@ -34,21 +34,20 @@
         console.log('Unknown response type', Response)
       }
     }
-    return Callable
   }
 
   function lock(Callback) {
     let InProgress = false
 
-    const Callable = function(Param) {
+    return function (Param) {
       if (!InProgress) {
         const ReturnValue = Callback.call(this, Param)
         InProgress = true
 
         if (ReturnValue && ReturnValue.constructor.name === 'Promise') {
-          ReturnValue.then(function() {
+          ReturnValue.then(function () {
             InProgress = false
-          }, function(e) {
+          }, function (e) {
             console.error(e)
             InProgress = false
           })
@@ -56,8 +55,6 @@
         } else InProgress = false
       }
     }
-
-    return Callable
   }
 
   function getElements(form) {
