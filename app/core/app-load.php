@@ -59,7 +59,7 @@ spl_autoload_register(function($Name){
 });
 
 require(APP_ROOT.'/config.php');
-require(EXTERNAL_ROOT.'/credentials.php');
+require(APP_ROOT.'/credentials.php');
 require(__DIR__.'/exceptions.php');
 require(__DIR__.'/session.php');
 require(__DIR__.'/helper.php');
