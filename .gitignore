@@ -6,7 +6,7 @@
 www.pid
 app/sitemap.xml
 node_modules
-external/app.local*
-external/certs
-external/credentials.php
+config/app.local*
+config/certs
+app/credentials.php
 external/mongodb.so
