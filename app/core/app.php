@@ -68,7 +68,6 @@ class App {
     }
     try {
       $Redis = $this->Redis = new RedisNG();
-      $Redis = new RedisNG();
       $Redis->connect(CONFIG_REDIS_HOST, CONFIG_REDIS_PORT);
       return $Redis;
     } catch (Exception $e) {
