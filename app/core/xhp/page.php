@@ -65,7 +65,7 @@ class :page extends :x:element {
     }
 
     foreach(Helper::organizeDependencies($Scripts) as $Script) {
-      $Footer[] = <script defer={$Script['dependents'] === 0 && !$Script['dependencies']->count()} src={Helper::toAssets($Script['src'])}></script>;
+      $Footer[] = <script defer={$Script['dependents'] === 0} src={Helper::toAssets($Script['src'])}></script>;
     }
     foreach(Helper::organizeDependencies($Styles) as $Style) {
       $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAssets($Style['src'])} />;
