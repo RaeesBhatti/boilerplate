@@ -3,6 +3,7 @@
 
 # Binary files
 *.so binary
+*.eot binary
 *.png binary
 *.jpg binary
 *.jepg binary
