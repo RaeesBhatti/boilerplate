@@ -11,10 +11,10 @@ class App {
   }
 
   // Props
-  public array<string, string> $Get;
-  public array<string, string> $Post;
-  public array<string, string> $Server;
-  public array<string, string> $Cookie;
+  public Map<string, string> $Get;
+  public Map<string, string> $Post;
+  public Map<string, string> $Server;
+  public Map<string, string> $Cookie;
   public string $LinkHeader;
   public int $HTTPCode = 200;
   public string $URL;
@@ -28,17 +28,17 @@ class App {
   private ?MongoDB\Database $DB;
   private Session $Session;
   private ?RedisNG $Redis;
-  public function __construct(array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie) {
+  public function __construct(Map<string, string> $Get, Map<string, string> $Post, Map<string, mixed> $Server, Map<string, string> $Cookie) {
     $this->Session = new Session();
-    $this->URL = array_key_exists('REQUEST_URI', $Server) ? explode('?', $Server['REQUEST_URI'])[0] : '';
+    $this->URL = $Server->contains('REQUEST_URI') ? explode('?', (string) $Server->get('REQUEST_URI'))[0] : '';
     $this->URLChunks = Helper::uriToChunks($this->URL);
-    $this->Get = array_map(class_meth('Helper', 'trim'), $Get);
-    $this->Post = array_map(class_meth('Helper', 'trim'), $Post);
-    $this->Server = array_map(class_meth('Helper', 'trim'), $Server);
-    $this->Cookie = array_map(class_meth('Helper', 'trim'), $Cookie);
+		$this->Get = $Get->map(fun('trim'));
+    $this->Post = $Post->map(fun('trim'));
+    $this->Server = $Server->map(class_meth('Helper', 'trim'));
+    $this->Cookie = $Cookie->map(fun('trim'));
     $this->LinkHeader = 'Link: ';
-    $this->Env = array_key_exists('ENV', $this->Server) && $this->Server['ENV'] === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
-    $this->isH2 = array_key_exists('H2', $this->Server) && $this->Server['H2'] !== '' ? true : false;
+    $this->Env = $this->Server->contains('ENV') && $this->Server->get('ENV') === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
+    $this->isH2 = $this->Server->contains('H2') && $this->Server->get('H2') !== '' ? true : false;
   }
   // Getters
   public function getSession(): Session {

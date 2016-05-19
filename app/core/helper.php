@@ -59,7 +59,7 @@ class Helper {
       return json_encode(array_merge(['status' => true], $message));
     } else throw new Exception('Incorrect API Response');
   }
-  public static function go(string $method, array<string, string> $Get, array<string, string> $Post, array<string, string> $Server, array<string, string> $Cookie): string {
+  public static function go(string $method, Map<string, string> $Get, Map<string, string> $Post, Map<string, mixed> $Server, Map<string, string> $Cookie): string {
     if (!HTTP::isValid($method)) {
       return '';
     }
