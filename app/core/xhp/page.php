@@ -69,7 +69,7 @@ class :page extends :x:element {
     }
     foreach(Helper::organizeDependencies($Styles) as $Style) {
       $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAssets($Style['src'])} />;
-      $App->LinkHeader .= '<'.Helper::toAssets($Style['src']).'>; rel=stylesheet, ';
+      $App->addToLinkHeader(Helper::toAssets($Style['src']), Map{'rel' => 'stylesheet'});
     }
     header($App->LinkHeader);
 
