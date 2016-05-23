@@ -71,7 +71,7 @@ class :page extends :x:element {
       $Header[] = <link rel="stylesheet" type="text/css" href={Helper::toAssets($Style['src'])} />;
       $App->addToLinkHeader(Helper::toAssets($Style['src']), Map{'rel' => 'stylesheet'});
     }
-    header($App->LinkHeader);
+		if($App->LinkHeader !== 'Link: ') header($App->LinkHeader);
 
     return
       <x:doctype>
