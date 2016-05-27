@@ -38,8 +38,8 @@ class Helper {
   // For API use only
   public static function validateFields(ImmSet<string> $Fields, array<string, string> $Post): void {
     foreach ($Fields as $FieldName) {
-      if (!array_key_exists($FieldName, $Post)) {
-        throw new APIException();
+      if (!array_key_exists($FieldName, $Post) || !strlen($Post[$FieldName])) {
+        throw new APIException('Required field '. $FieldName . ' not submitted.');
       }
     }
   }
