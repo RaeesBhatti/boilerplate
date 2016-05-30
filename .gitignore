@@ -10,3 +10,5 @@ config/app.local*
 config/certs
 app/credentials.php
 external/mongodb.so
+
+.data
