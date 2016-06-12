@@ -170,6 +170,7 @@ class Helper {
     }
     return $Content;
   }
+	<<__Memoize>>
   public static function isSecure(): bool {
     return App::getInstance()->Server->contains('HTTPS') && App::getInstance()->Server->get('HTTPS') === 'on';
   }
