@@ -106,10 +106,12 @@ class App {
   public function getUser(): ?User {
     $session = $this->getSession();
     if ($session->exists('UserID')) {
-      $id = $session->get('UserID', 0);
-      $user = $this->getDB()->selectCollection('users')->findOne(['id' => $id]);
-      if ($user !== null) {
-        return $this->User = $user;
+      $id = $session->get('UserID', null);
+      $User = $this->getDB()->selectCollection('users')->findOne(['id' => $id]);
+      if ($User !== null) {
+        return $this->User = shape(
+					'id' => $User['_id']
+				);
       } else {
         $session->unset('UserID');
       }
