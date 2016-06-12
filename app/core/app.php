@@ -119,12 +119,6 @@ class App {
     }
     return null;
   }
-	public function addToLinkHeader(string $link, Map<string, string> $attributes): void {
-		$this->LinkHeader .= ', <'.$link.'>';
-		foreach($attributes as $key => $val){
-			$this->LinkHeader .= '; '.$key.'='.(strpos($val, ' ') ? '"'.$val.'"' : $val);
-		}
-	}
   public function execute(HTTP $Method): string {
     $RouterTheme = new Router();
     $RouterTheme->registerTheme(Theme_Guest_Main::class);
