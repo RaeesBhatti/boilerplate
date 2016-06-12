@@ -36,10 +36,16 @@ class Helper {
   }
 
   // For API use only
-  public static function validateFields(ImmSet<string> $Fields, ImmMap<string, string> $Post): void {
+	public static function validateFields(ImmSet<string> $Fields, ImmMap<string, string> $Post): void {
+		$App = App::getInstance();
     foreach ($Fields as $FieldName) {
-			if(!$Post->contains($FieldName) || $Post->get($FieldName) === null || !strlen($Post->get($FieldName)))
-      	throw new APIException('Required field '. $FieldName . ' not submitted.');
+			if(!$Post->contains($FieldName) || $Post->get($FieldName) === null || !strlen($Post->get($FieldName))){
+				if(APP_ENV === AppEnv::API){
+					throw new APIException('Required field '. $FieldName . ' not submitted.');
+				} else {
+					throw new Exception('Field '. $FieldName . ' not provided.');
+				}
+			}
     }
   }
   public static function uriToChunks(string $URI): array<string> {
