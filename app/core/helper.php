@@ -12,12 +12,12 @@ class Helper {
   public static function validateReferer(): bool {
     $Error = false;
     $Server = App::getInstance()->Server;
-    if (!array_key_exists('HTTP_REFERER', $Server)){
+    if (!$Server->contains('HTTP_REFERER')){
       $Error = true;
     } else {
       try {
-        $URL = parse_url($Server['HTTP_REFERER']);
-        if (!$URL || !array_key_exists('host', $URL) || $URL['host'] !== $Server['SERVER_NAME']) {
+        $URL = parse_url((string) $Server->get('HTTP_REFERER'));
+        if (!$URL || !array_key_exists('host', $URL) || $URL['host'] !== (string) $Server->get('SERVER_NAME')) {
           $Error = true;
         }
       } catch(Exception $e) { $Error = true; }
@@ -36,11 +36,10 @@ class Helper {
   }
 
   // For API use only
-  public static function validateFields(ImmSet<string> $Fields, array<string, string> $Post): void {
+  public static function validateFields(ImmSet<string> $Fields, ImmMap<string, string> $Post): void {
     foreach ($Fields as $FieldName) {
-      if (!array_key_exists($FieldName, $Post) || !strlen($Post[$FieldName])) {
-        throw new APIException('Required field '. $FieldName . ' not submitted.');
-      }
+			if(!$Post->contains($FieldName) || $Post->get($FieldName) === null || !strlen($Post->get($FieldName)))
+      	throw new APIException('Required field '. $FieldName . ' not submitted.');
     }
   }
   public static function uriToChunks(string $URI): array<string> {
@@ -59,7 +58,7 @@ class Helper {
       return json_encode(array_merge(['status' => true], $message));
     } else throw new Exception('Incorrect API Response');
   }
-  public static function go(string $method, Map<string, string> $Get, Map<string, string> $Post, Map<string, mixed> $Server, Map<string, string> $Cookie): string {
+  public static function go(string $method, ImmMap<string, string> $Get, ImmMap<string, string> $Post, ImmMap<string, mixed> $Server, ImmMap<string, string> $Cookie): string {
     if (!HTTP::isValid($method)) {
       return '';
     }
@@ -172,6 +171,6 @@ class Helper {
     return $Content;
   }
   public static function isSecure(): bool {
-    return array_key_exists('HTTPS', App::getInstance()->Server) && App::getInstance()->Server['HTTPS'] === 'on';
+    return App::getInstance()->Server->contains('HTTPS') && App::getInstance()->Server->get('HTTPS') === 'on';
   }
 }

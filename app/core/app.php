@@ -11,10 +11,10 @@ class App {
   }
 
   // Props
-  public Map<string, string> $Get;
-  public Map<string, string> $Post;
-  public Map<string, string> $Server;
-  public Map<string, string> $Cookie;
+  public ImmMap<string, string> $Get;
+  public ImmMap<string, string> $Post;
+  public ImmMap<string, string> $Server;
+  public ImmMap<string, string> $Cookie;
   public string $LinkHeader;
   public int $HTTPCode = 200;
   public string $URL;
@@ -29,7 +29,7 @@ class App {
   private ?MongoDB\Database $DB;
   private Session $Session;
   private ?RedisNG $Redis;
-  public function __construct(Map<string, string> $Get, Map<string, string> $Post, Map<string, mixed> $Server, Map<string, string> $Cookie) {
+  public function __construct(ImmMap<string, string> $Get, ImmMap<string, string> $Post, ImmMap<string, mixed> $Server, ImmMap<string, string> $Cookie) {
     $this->Session = new Session();
     $this->URL = $Server->contains('REQUEST_URI') ? explode('?', (string) $Server->get('REQUEST_URI'))[0] : '';
     $this->URLChunks = Helper::uriToChunks($this->URL);
