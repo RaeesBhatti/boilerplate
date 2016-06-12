@@ -104,6 +104,7 @@ class App {
     }
   }
   public function getUser(): ?User {
+		if($this->User !== null) return $this->User;
     $session = $this->getSession();
     if ($session->exists('UserID')) {
       $id = $session->get('UserID', null);
