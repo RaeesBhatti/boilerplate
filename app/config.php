@@ -13,5 +13,11 @@ enum AppEnv: string as string {
   PRODUCTION = 'production';
   DEVELOPMENT = 'development';
 }
+enum ExceptionCode:int as int {
+	GENERIC = 1;
+	NOT_FOUND = 2;
+	NETWORK_ERROR = 3;
+	DELETED = 4;
+}
 const string ASSETS_PREFIX = 'res.app.com/';
 const string HOSTNAME = 'app.com';
