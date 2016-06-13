@@ -19,7 +19,6 @@ class App {
   public int $HTTPCode = 200;
   public string $URL;
   public array<string> $URLChunks;
-  public int $UserID = 0;
   public string $Env;
   public bool $isH2;
 	public Vector<Map<string, mixed>> $AcceptLanguage = Vector{};
