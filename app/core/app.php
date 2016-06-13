@@ -1,11 +1,11 @@
 <?hh //strict
 
 class App {
-  public static ?App $Instance = null;
+  private static ?App $Instance = null;
 
   public static function getInstance(): App {
-    if (static::$Instance !== null) {
-      return static::$Instance;
+    if (self::$Instance !== null) {
+      return self::$Instance;
     }
     throw new Exception('App is not yet initialized');
   }
@@ -39,6 +39,7 @@ class App {
     $this->LinkHeader = 'Link: ';
     $this->Env = $this->Server->contains('ENV') && $this->Server->get('ENV') === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
     $this->isH2 = $this->Server->contains('H2') && $this->Server->get('H2') !== '' ? true : false;
+		self::$Instance = $this;
   }
   // Getters
   public function getSession(): Session {

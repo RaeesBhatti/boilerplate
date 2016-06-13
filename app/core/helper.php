@@ -69,7 +69,6 @@ class Helper {
       return '';
     }
     $App = new App($Get, $Post, $Server, $Cookie);
-    App::$Instance = $App;
 
     try {
       try {
