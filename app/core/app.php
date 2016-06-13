@@ -21,13 +21,13 @@ class App {
   public array<string> $URLChunks;
   public string $Env;
   public bool $isH2;
-	public Vector<Map<string, mixed>> $AcceptLanguage = Vector{};
 
   // Instances
   private ?User $User;
   private ?MongoDB\Database $DB;
   private Session $Session;
   private ?RedisNG $Redis;
+	private ?Vector<Map<string, mixed>> $AcceptLanguage;
   public function __construct(ImmMap<string, string> $Get, ImmMap<string, string> $Post, ImmMap<string, mixed> $Server, ImmMap<string, string> $Cookie) {
     $this->Session = new Session();
     $this->URL = $Server->contains('REQUEST_URI') ? explode('?', (string) $Server->get('REQUEST_URI'))[0] : '';
@@ -39,33 +39,6 @@ class App {
     $this->LinkHeader = 'Link: ';
     $this->Env = $this->Server->contains('ENV') && $this->Server->get('ENV') === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
     $this->isH2 = $this->Server->contains('H2') && $this->Server->get('H2') !== '' ? true : false;
-		if($this->Server->contains('HTTP_ACCEPT_LANGUAGE')){
-			foreach(explode(',', substr((string) $this->Server->get('HTTP_ACCEPT_LANGUAGE'), 0, 34)) as $elem){
-				$attributes = array_map(function($e){return trim($e);}, explode(';', substr($elem, 0, 15)));
-				if(count($attributes) === 1){
-					$this->AcceptLanguage->add(Map{'lang' => $attributes[0], 'quality' => 1.0});
-				} else {
-					$pair = Map{};
-					$language = '';
-					foreach($attributes as $attrib){
-						$parsed = Map{};
-						$key = null;
-						foreach(explode('=', $attrib) as $entry) {
-							if ($key !== null) {
-								$parsed->set($key, $entry);
-								$key = null;
-							} else $key = $entry;
-						}
-						if(!$parsed->count()){
-							$language = $attrib;
-						} else {
-							$pair->set($language, (float) $parsed->get('q'));
-						}
-					}
-					if($pair->count()) $this->AcceptLanguage->add($pair);
-				}
-			}
-		}
   }
   // Getters
   public function getSession(): Session {
@@ -118,6 +91,38 @@ class App {
     }
     return null;
   }
+	public function getAcceptLanguage(): Vector<Map<string, mixed>> {
+		if($this->AcceptLanguage !== null) return $this->AcceptLanguage;
+		$AcceptLanguage = Vector{};
+		if($this->Server->contains('HTTP_ACCEPT_LANGUAGE')){
+			foreach(explode(',', substr((string) $this->Server->get('HTTP_ACCEPT_LANGUAGE'), 0, 34)) as $elem){
+				$attributes = array_map(function($e){return trim($e);}, explode(';', substr($elem, 0, 15)));
+				if(count($attributes) === 1){
+					$AcceptLanguage->add(Map{'lang' => $attributes[0], 'quality' => 1.0});
+				} else {
+					$pair = Map{};
+					$language = '';
+					foreach($attributes as $attrib){
+						$parsed = Map{};
+						$key = null;
+						foreach(explode('=', $attrib) as $entry) {
+							if ($key !== null) {
+								$parsed->set($key, $entry);
+								$key = null;
+							} else $key = $entry;
+						}
+						if(!$parsed->count()){
+							$language = $attrib;
+						} else {
+							$pair->set($language, (float) $parsed->get('q'));
+						}
+					}
+					if($pair->count()) $AcceptLanguage->add($pair);
+				}
+			}
+		}
+		return $this->AcceptLanguage = $AcceptLanguage;
+	}
   public function execute(HTTP $Method): string {
     $RouterTheme = new Router();
     $RouterTheme->registerTheme(Theme_Guest_Main::class);
