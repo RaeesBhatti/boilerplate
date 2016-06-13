@@ -30,7 +30,7 @@ class App {
 	private ?Vector<Map<string, mixed>> $AcceptLanguage;
   public function __construct(ImmMap<string, string> $Get, ImmMap<string, string> $Post, ImmMap<string, mixed> $Server, ImmMap<string, string> $Cookie) {
     $this->Session = new Session();
-    $this->URL = $Server->contains('REQUEST_URI') ? explode('?', (string) $Server->get('REQUEST_URI'))[0] : '';
+    $this->URL = $Server->contains('REQUEST_URI') ? array_shift(explode('?', (string) $Server->get('REQUEST_URI'))) : '';
     $this->URLChunks = Helper::uriToChunks($this->URL);
 		$this->Get = $Get->map(fun('trim'));
     $this->Post = $Post->map(fun('trim'));
