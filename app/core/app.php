@@ -103,8 +103,8 @@ class App {
       throw new HTTPException(500);
     }
   }
-  public function getUser(): ?User {
-		if($this->User !== null) return $this->User;
+  public function getUser(bool $ForceUpdate = false): ?User {
+		if($this->User !== null && !$ForceUpdate) return $this->User;
     $session = $this->getSession();
     if ($session->exists('UserID')) {
       $id = $session->get('UserID', null);
