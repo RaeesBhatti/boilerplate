@@ -9,6 +9,6 @@ node_modules
 config/app.local*
 config/certs
 app/credentials.php
-external/mongodb.so
+*.so
 
 .data
