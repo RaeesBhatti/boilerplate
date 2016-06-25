@@ -15,7 +15,7 @@ class App {
   public ImmMap<string, string> $Post;
   public ImmMap<string, string> $Server;
   public ImmMap<string, string> $Cookie;
-  public string $LinkHeader;
+  public ?string $LinkHeader;
   public int $HTTPCode = 200;
   public string $URL;
   public array<string> $URLChunks;
@@ -36,7 +36,7 @@ class App {
     $this->Post = $Post->map(fun('trim'));
     $this->Server = $Server->map(class_meth('Helper', 'trim'));
     $this->Cookie = $Cookie->map(fun('trim'));
-    $this->LinkHeader = 'Link: ';
+    $this->LinkHeader = null;
     $this->Env = $this->Server->contains('ENV') && $this->Server->get('ENV') === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
     $this->isH2 = $this->Server->contains('H2') && $this->Server->get('H2') !== '' ? true : false;
 		self::$Instance = $this;

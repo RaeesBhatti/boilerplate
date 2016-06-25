@@ -181,7 +181,7 @@ class Helper {
   }
 	public function addToLinkHeader(string $link, ImmMap<string, string> $attributes): void {
 		$App = App::getInstance();
-		$App->LinkHeader .= ', <'.$link.'>';
+		$App->LinkHeader = ($App->LinkHeader === null) ? 'Link: <'.$link.'>' : $App->LinkHeader.', <'.$link.'>';
 		foreach($attributes as $key => $val){
 			$App->LinkHeader .= '; '.$key.'='.(strpos($val, ' ') ? '"'.$val.'"' : $val);
 		}
