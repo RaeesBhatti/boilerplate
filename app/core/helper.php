@@ -179,7 +179,7 @@ class Helper {
   public static function isSecure(): bool {
     return App::getInstance()->Server->contains('HTTPS') && App::getInstance()->Server->get('HTTPS') === 'on';
   }
-	public function addToLinkHeader(string $link, ImmMap<string, string> $attributes): void {
+	public static function addToLinkHeader(string $link, ImmMap<string, string> $attributes): void {
 		$App = App::getInstance();
 		$App->LinkHeader = ($App->LinkHeader === null) ? 'Link: <'.$link.'>' : $App->LinkHeader.', <'.$link.'>';
 		foreach($attributes as $key => $val){
