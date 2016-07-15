@@ -3,7 +3,7 @@ class Helper {
   public static function trim(mixed $Value):string{
     if (is_array($Value)) {
       return '';
-    } else if (is_bool($Value)) {
+    } elseif (is_bool($Value)) {
       return $Value ? 'true' : 'false';
     } else {
       return trim((string) $Value);
