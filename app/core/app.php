@@ -18,7 +18,7 @@ class App {
   public ?string $LinkHeader;
   public int $HTTPCode = 200;
   public string $URL;
-  public array<string> $URLChunks;
+  public ImmVector<string> $URLChunks;
   public string $Env;
   public bool $isH2;
 
@@ -30,8 +30,8 @@ class App {
 	private ?Vector<Map<string, mixed>> $AcceptLanguage;
   public function __construct(ImmMap<string, string> $Get, ImmMap<string, string> $Post, ImmMap<string, mixed> $Server, ImmMap<string, string> $Cookie) {
     $this->Session = new Session();
-    $this->URL = $Server->contains('REQUEST_URI') ? array_shift(explode('?', (string) $Server->get('REQUEST_URI'))) : '';
-    $this->URLChunks = Helper::uriToChunks($this->URL);
+    $this->URL = $Server->contains('REQUEST_URI') ? (string) array_shift(explode('?', (string) $Server->get('REQUEST_URI'))) : '';
+    $this->URLChunks = new ImmVector(Helper::uriToChunks($this->URL));
 		$this->Get = $Get->map(fun('trim'));
     $this->Post = $Post->map(fun('trim'));
     $this->Server = $Server->map(class_meth('Helper', 'trim'));
