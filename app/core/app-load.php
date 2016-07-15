@@ -1,7 +1,10 @@
 <?php
 // Initializing configurations
 ignore_user_abort(true);
-set_time_limit(300);
+if(APP_ENV === 'DAEMON')
+	set_time_limit(0);
+else
+	set_time_limit(300);
 define('RAND_MAX', mt_getrandmax());
 define('APP_ROOT', __DIR__.'/..');
 define('EXTERNAL_ROOT', __DIR__.'/../../external');
