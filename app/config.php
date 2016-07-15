@@ -10,6 +10,7 @@ enum AppEnv: string as string {
   API = 'API';
   UNIT_TESTS = 'UNIT_TESTS';
   MAIN = 'MAIN';
+  DAEMON = 'DAEMON';
   PRODUCTION = 'production';
   DEVELOPMENT = 'development';
 }
