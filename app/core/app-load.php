@@ -13,23 +13,23 @@ define('APP_DEBUG', !APP_IN_CLI && $_SERVER['REMOTE_ADDR'] === '127.0.0.1');
 
 // Basic runtime checks
 if (APP_IN_CLI) {
-  // We are in CLI
-  if (APP_ENV !== 'UNIT_TESTS') {
-    echo "The website is not to be ran from CLI\n";
-    exit(1);
-  } else {
-    // Initialize some placeholder ENV vars
-    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-    $_SERVER['REQUEST_URI'] = '/';
-    $_SESSION = [];
-  }
+	// We are in CLI
+	if (APP_ENV !== 'UNIT_TESTS') {
+		echo "The website is not to be ran from CLI\n";
+		exit(1);
+	} else {
+		// Initialize some placeholder ENV vars
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['REQUEST_URI'] = '/';
+		$_SESSION = [];
+	}
 } else {
-  session_start();
+	session_start();
 }
 
 if (APP_DEBUG) {
-  error_reporting(E_ALL);
-  ini_set('display_errors', 1);
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
 }
 
 require(EXTERNAL_ROOT.'/redis/autoload.php');
@@ -37,18 +37,18 @@ require(EXTERNAL_ROOT.'/xhp/init.php');
 require(EXTERNAL_ROOT.'/mongo-php-library/vendor/autoload.php');
 spl_autoload_register(function($Name) {
 
-  if (substr($Name, 0, 4) === 'xhp_') {
-    $ClassName = substr($Name, 4);
-    $FilePath = __DIR__.'/xhp/'.$ClassName.'.php';
-  } else {
-    // Converts Theme_User_Home to theme/user/home.php
-    $Chunks = explode('_', $Name);
-    $FilePath = APP_ROOT.'/'.strtolower(implode('/', $Chunks)).'.php';
-  }
+	if (substr($Name, 0, 4) === 'xhp_') {
+		$ClassName = substr($Name, 4);
+		$FilePath = __DIR__.'/xhp/'.$ClassName.'.php';
+	} else {
+		// Converts Theme_User_Home to theme/user/home.php
+		$Chunks = explode('_', $Name);
+		$FilePath = APP_ROOT.'/'.strtolower(implode('/', $Chunks)).'.php';
+	}
 
-  if ($FilePath !== null && file_exists($FilePath)) {
-    require($FilePath);
-  }
+	if ($FilePath !== null && file_exists($FilePath)) {
+		require($FilePath);
+	}
 });
 
 require(APP_ROOT.'/config.php');
