@@ -20,5 +20,3 @@ enum ExceptionCode:int as int {
 	NETWORK_ERROR = 3;
 	DELETED = 4;
 }
-const string ASSETS_PREFIX = 'res.app.com/';
-const string HOSTNAME = 'app.com';
