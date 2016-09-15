@@ -7,7 +7,7 @@ else
 	set_time_limit(300);
 define('RAND_MAX', mt_getrandmax());
 define('APP_ROOT', __DIR__.'/..');
-define('EXTERNAL_ROOT', __DIR__.'/../../external');
+define('DEPS_ROOT', __DIR__.'/../../deps');
 define('APP_IN_CLI', !array_key_exists('REMOTE_ADDR', $_SERVER));
 define('APP_DEBUG', !APP_IN_CLI && $_SERVER['REMOTE_ADDR'] === '127.0.0.1');
 
