@@ -1,15 +1,27 @@
+# Generic IDE or OS files
 .idea
 .vscode
 .vagrant
 .atom-hack
-.notes
 .DS_Store
 www.pid
-app/sitemap.xml
-node_modules
-config/app.local*
-config/certs
-app/credentials.php
-*.so
 
+# Package manager files
+node_modules
+deps
+
+# Credentials and certificates
+app/credentials.php
+config/certs
+
+# Configurations
+config/app.local*
+
+# Arbitrary ignored files
+app/sitemap.xml
+assets/solah/css
+assets/solah/js
+assets/lib
 .data
+.notes
+*.so
