@@ -1,9 +1,0 @@
-[submodule "external/xhp"]
-	path = external/xhp
-	url = https://github.com/facebook/xhp-lib.git
-[submodule "external/redis"]
-	path = external/redis
-	url = https://github.com/steelbrain/RedisNG.git
-[submodule "external/mongo-php-library"]
-	path = external/mongo-php-library
-	url = https://github.com/mongodb/mongo-php-library.git

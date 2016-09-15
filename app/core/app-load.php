@@ -32,9 +32,6 @@ if (APP_DEBUG) {
 	ini_set('display_errors', 1);
 }
 
-require(EXTERNAL_ROOT.'/redis/autoload.php');
-require(EXTERNAL_ROOT.'/xhp/init.php');
-require(EXTERNAL_ROOT.'/mongo-php-library/vendor/autoload.php');
 spl_autoload_register(function($Name) {
 
 	if (substr($Name, 0, 4) === 'xhp_') {
