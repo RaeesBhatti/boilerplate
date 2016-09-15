@@ -1,6 +1,8 @@
 
 {
 	"config": {
+		"name": "raeesbhatti/boilerplate",
+		"description": "A HackLang based frame-work for building web apps.",
 		"vendor-dir": "deps"
 	},
 	"require": {
