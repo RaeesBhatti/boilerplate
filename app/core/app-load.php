@@ -32,6 +32,7 @@ if (APP_DEBUG) {
 	ini_set('display_errors', 1);
 }
 
+require(DEPS_ROOT.'/autoload.php');
 spl_autoload_register(function($Name) {
 
 	if (substr($Name, 0, 4) === 'xhp_') {
