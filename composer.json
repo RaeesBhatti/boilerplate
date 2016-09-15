@@ -1,0 +1,12 @@
+
+{
+	"config": {
+		"vendor-dir": "deps"
+	},
+	"require": {
+		"hhvm": "~3.12",
+		"facebook/xhp-lib": "~2.2",
+		"mongodb/mongodb": "~1.0.2",
+		"steelbrain/redis-ng": "dev-master"
+	}
+}
