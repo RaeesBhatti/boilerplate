@@ -1,0 +1,31 @@
+version: '2'
+services:
+  hhvm:
+    container_name: app-hhvm
+    image: hhvm/hhvm:3.15.2
+    entrypoint: hhvm -m server -c /etc/hhvm/server.ini
+    volumes:
+      - ./config/app.local.ini:/etc/hhvm/server.ini
+      - ./app:/var/www/app
+      - ./deps:/var/www/deps
+      - ./app/main.php:/var/www/document_root/main.php
+      - ./assets:/var/www/document_root/assets
+      - ./assets/robots.txt:/var/www/document_root/robots.txt
+    links:
+      - redis:app-redis
+      - mongodb:app-mongodb
+    ports:
+      - "80:8080"
+  redis:
+    container_name: app-redis
+    image: redis:3-alpine
+    volumes:
+      - redisdata:/data
+  mongodb:
+    container_name: app-mongodb
+    image: mongo:3
+    volumes:
+      - mongodata:/data/db
+volumes:
+  redisdata: {}
+  mongodata: {}
