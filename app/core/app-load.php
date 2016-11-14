@@ -9,22 +9,26 @@ define('RAND_MAX', mt_getrandmax());
 define('APP_ROOT', __DIR__.'/..');
 define('DEPS_ROOT', __DIR__.'/../../deps');
 define('APP_IN_CLI', !array_key_exists('REMOTE_ADDR', $_SERVER));
-define('APP_DEBUG', !APP_IN_CLI && $_SERVER['REMOTE_ADDR'] === '127.0.0.1');
+define('APP_DEBUG', !APP_IN_CLI && (key_exists('DEBUG', $_SERVER) && $_SERVER['DEBUG'] === 'TRUE'));
 
 // Basic runtime checks
 if (APP_IN_CLI) {
-	// We are in CLI
-	if (APP_ENV !== 'UNIT_TESTS') {
-		echo "The website is not to be ran from CLI\n";
-		exit(1);
-	} else {
-		// Initialize some placeholder ENV vars
-		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-		$_SERVER['REQUEST_URI'] = '/';
-		$_SESSION = [];
-	}
-} else {
-	session_start();
+  // We are in CLI
+  if (APP_ENV !== 'UNIT_TESTS') {
+    echo "The website is not to be ran from CLI\n";
+    exit(1);
+  } else {
+    // Initialize some placeholder ENV vars
+    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+    $_SERVER['REQUEST_URI'] = '/';
+    $_SESSION = [];
+  }
+} elseif(
+	(array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] === 'on') ||
+	(array_key_exists('HTTP_X_FORWARDED_PROTO', $_SERVER) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+	APP_DEBUG
+	) {
+  session_start();
 }
 
 if (APP_DEBUG) {
