@@ -11,7 +11,7 @@ node_modules
 deps
 
 # Credentials and certificates
-app/credentials.php
+app/credentials.hh
 config/certs
 
 # Configurations

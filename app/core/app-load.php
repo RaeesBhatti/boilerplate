@@ -41,11 +41,11 @@ spl_autoload_register(function($Name) {
 
 	if (substr($Name, 0, 4) === 'xhp_') {
 		$ClassName = substr($Name, 4);
-		$FilePath = __DIR__.'/xhp/'.$ClassName.'.php';
+		$FilePath = __DIR__.'/xhp/'.$ClassName.'.hh';
 	} else {
-		// Converts Theme_User_Home to theme/user/home.php
+		// Converts Theme_User_Home to theme/user/home.hh
 		$Chunks = explode('_', $Name);
-		$FilePath = APP_ROOT.'/'.strtolower(implode('/', $Chunks)).'.php';
+		$FilePath = APP_ROOT.'/'.strtolower(implode('/', $Chunks)).'.hh';
 	}
 
 	if ($FilePath !== null && file_exists($FilePath)) {
@@ -53,14 +53,14 @@ spl_autoload_register(function($Name) {
 	}
 });
 
-require(APP_ROOT.'/config.php');
-require(APP_ROOT.'/credentials.php');
-require(__DIR__.'/exceptions.php');
-require(__DIR__.'/session.php');
-require(__DIR__.'/helper.php');
-require(__DIR__.'/page.php');
-require(__DIR__.'/theme.php');
-require(__DIR__.'/router.php');
-require(__DIR__.'/shapes.php');
-require(__DIR__.'/validate.php');
-require(__DIR__.'/app.php');
+require(APP_ROOT.'/config.hh');
+require(APP_ROOT.'/credentials.hh');
+require(__DIR__.'/exceptions.hh');
+require(__DIR__.'/session.hh');
+require(__DIR__.'/helper.hh');
+require(__DIR__.'/page.hh');
+require(__DIR__.'/theme.hh');
+require(__DIR__.'/router.hh');
+require(__DIR__.'/shapes.hh');
+require(__DIR__.'/validate.hh');
+require(__DIR__.'/app.hh');
