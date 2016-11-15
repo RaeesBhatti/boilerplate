@@ -11,6 +11,7 @@ services:
       - ./app/main.php:/var/www/document_root/main.php
       - ./assets:/var/www/document_root/assets
       - ./assets/robots.txt:/var/www/document_root/robots.txt
+      - ./config/certs:/etc/hhvm/certs:ro
     links:
       - redis:app-redis
       - mongodb:app-mongodb
