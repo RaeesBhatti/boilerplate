@@ -11,8 +11,8 @@ enum AppEnv: string as string {
 	UNIT_TESTS = 'UNIT_TESTS';
 	MAIN = 'MAIN';
 	DAEMON = 'DAEMON';
-	PRODUCTION = 'production';
-	DEVELOPMENT = 'development';
+	PRODUCTION = 'PRODUCTION';
+	DEVELOPMENT = 'DEVELOPMENT';
 }
 enum ExceptionCode:int as int {
 	GENERIC = 1;
