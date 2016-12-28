@@ -159,10 +159,10 @@ class Helper {
 		return $resolved;
 	}
 	public static function toAbsolute(string $URL): string {
-		return Helper::isSecure() ? 'https://'.HOSTNAME.$URL : 'http://'.HOSTNAME.$URL;
+		return 'https://'.HOSTNAME.$URL;
 	}
 	public static function toAssets(string $URL): string {
-		return Helper::isSecure() ? 'https://'.ASSETS_PREFIX.$URL : 'http://'.ASSETS_PREFIX.$URL;
+		return 'https://'.ASSETS_PREFIX.$URL;
 	}
 	public static function renderPage(classname<Page> $PageName): Stringish {
 		$Page = new $PageName();
