@@ -20,8 +20,8 @@ config/app.local*
 
 # Arbitrary ignored files
 app/sitemap.xml
-assets/solah/css
-assets/solah/js
+assets/satrah/css
+assets/satrah/js
 assets/lib
 .data
 .notes
