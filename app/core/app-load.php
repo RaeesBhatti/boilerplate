@@ -25,8 +25,7 @@ if (APP_IN_CLI) {
   }
 } elseif(
 	(array_key_exists('HTTPS', $_SERVER) && $_SERVER['HTTPS'] === 'on') ||
-	(array_key_exists('HTTP_X_FORWARDED_PROTO', $_SERVER) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
-	APP_DEBUG
+	(array_key_exists('HTTP_X_FORWARDED_SCHEME', $_SERVER) && $_SERVER['HTTP_X_FORWARDED_SCHEME'] === 'https')
 	) {
   session_start();
 }
