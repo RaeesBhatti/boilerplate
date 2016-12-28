@@ -13,6 +13,7 @@ deps
 # Credentials and certificates
 app/credentials.hh
 config/certs
+config/ingress-secrets.yaml
 
 # Configurations
 config/app.local*
