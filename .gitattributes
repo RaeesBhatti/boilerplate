@@ -11,5 +11,6 @@
 *.ico binary
 *.psd binary
 *.ttf binary
+*.otf binary
 *.woff binary
 *.woff2 binary
