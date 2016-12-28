@@ -2,8 +2,7 @@
 
 class :ra extends :a {
 	public function stringify(): string {
-		$this->setAttribute('href', Helper::isSecure() ? 'https://'.HOSTNAME.$this->getAttribute('href') : '//'.HOSTNAME.$this->getAttribute('href')
-		);
+		$this->setAttribute('href', Helper::toAbsolute($this->getAttribute('href')));
 		return parent::stringify();
 	}
 }
