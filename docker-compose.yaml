@@ -5,7 +5,7 @@ services:
     image: hhvm/hhvm:3.15.2
     entrypoint: hhvm -m server -c /etc/hhvm/server.ini
     volumes:
-      - ./config/app.local.ini:/etc/hhvm/server.ini
+      - ./config/app.ini:/etc/hhvm/server.ini
       - ./app:/var/www/app
       - ./deps:/var/www/deps
       - ./app/main.php:/var/www/document_root/main.php
