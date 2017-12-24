@@ -11,12 +11,13 @@ services:
       - ./app/main.php:/var/www/document_root/main.php
       - ./assets:/var/www/document_root/assets
       - ./assets/robots.txt:/var/www/document_root/robots.txt
-      - ./config/certs:/etc/hhvm/certs:ro
+      - ~/.tls:/etc/hhvm/certs:ro
     links:
       - redis:app-redis
       - mongodb:app-mongodb
     ports:
       - "80:8080"
+      - "443:8443"
   redis:
     container_name: app-redis
     image: redis:3-alpine
