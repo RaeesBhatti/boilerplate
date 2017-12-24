@@ -38,7 +38,7 @@ class App {
 		$this->Cookie = $Cookie->map(fun('trim'));
 		$this->LinkHeader = null;
 		$this->Env = $this->Server->contains('ENV') && $this->Server->get('ENV') === AppEnv::PRODUCTION ? AppEnv::PRODUCTION : AppEnv::DEVELOPMENT;
-		$this->isH2 = $this->Server->contains('HTTP_X_FORWARDED_PROTO') && $this->Server->get('HTTP_X_FORWARDED_PROTO') !== '' ? true : false;
+		$this->isH2 = $this->Server->contains('H2') && $this->Server->get('H2') !== '' ? true : false;
 		self::$Instance = $this;
 	}
 	// Getters
